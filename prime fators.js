@@ -8,7 +8,7 @@ let factorial = 0;
 
 for (let i = 2; i <= number; i++){
     if (number % i === 0){
-        while(number % i ===0){
+        while(number % i === 0){
         console.log(i);
         number = number / i
         }
