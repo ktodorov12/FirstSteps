@@ -9,11 +9,8 @@ let below = [];
 let sum = 0;
 
 numbers.forEach(element => sum += Number(element));
-/*for (let char of numbers){
-    char = Number(char)
-    sum += char
-}*/
 let average = sum / numbers.length;
+
 
 for (let i = 0; i < numbers.length; i++){
     if (numbers[i] > average){
@@ -22,6 +19,7 @@ for (let i = 0; i < numbers.length; i++){
         below.push(numbers[i])
     }
 }
+
 console.log(`avg: ${average.toFixed(2)}`);
 console.log(`below: ${below}`);
 console.log(`above: ${above}`);
