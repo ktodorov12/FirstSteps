@@ -8,10 +8,11 @@ let above = [];
 let below = [];
 let sum = 0;
 
-for (let char of numbers){
+numbers.forEach(element => sum += Number(element));
+/*for (let char of numbers){
     char = Number(char)
     sum += char
-}
+}*/
 let average = sum / numbers.length;
 
 for (let i = 0; i < numbers.length; i++){
