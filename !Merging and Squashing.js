@@ -10,13 +10,8 @@ let ab = gets();
 
 for (let i = 1; i < lines; i++){
     let cd = gets();
-    let equation = +ab[1] + +cd[0]
-    if (equation >= 10){
-        equation = equation.toString();
-        equation = equation[1]
-    }
     let mergeSequence = ab[1] + cd[0];
-    let squasheSequence = ab[0] + equation + cd[1];
+    let squasheSequence = ab[0] + (+ab[1] + +cd[0]) % 10 + cd[1];
     merged += ' ' + mergeSequence;
     squashed += ' ' + squasheSequence;
 
