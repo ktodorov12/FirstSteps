@@ -1,5 +1,4 @@
-let input = ['azsumtup',
- 3, 'av','vvcxv','moccucomgic'];
+let input = ['peshoishere',3, 'eho','piere','telerik'];
 
 let print = this.print || console.log;
 let gets =this.gets ||((arr, index) => () =>arr[index++])(input, 0);
