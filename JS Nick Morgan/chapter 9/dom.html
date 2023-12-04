@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Playing with the DOM</title>
+  </head>
+  <body>
+    <h1 id="main-heading">Hello World!</h1>
+
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+    <script>
+      $("h1").fadeOut(3000)
+      $("h1").fadeIn(3000)
+      $("body").append("<p>This is a new paragraph</p>")
+      for(let i = 0; i < 3; i++) {
+        let hobby = prompt("Tell me one of your hobbies!");
+        $("body").fadeIn(1000).append(`<li>${hobby}</li>`)
+      }
+    </script>
+  </body>
+</html>

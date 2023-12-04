@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Hangman Game!</h1>
+    <script>
+      let name = prompt("What's your name?");
+      let pattern = /[^a-zA-z]/g;
+      let test = (name) => pattern.test(name);
+
+      let isTrue = test(name);
+      while (name === null || isTrue) {
+        alert("Please enter your name :)");
+        name = prompt("What's your name?");
+        isTrue = test(name);
+      }
+      alert(`Hello ${name}!`);
+
+      let array = ["monkey", "donkey", "giraffe", "koala"];
+      let randomWord = array[Math.floor(Math.random() * array.length)];
+      let ticks = "_".repeat(randomWord.length).split("");
+      let tries = 6;
+
+      let hasPassed = true;
+      while (ticks.includes("_")) {
+        alert(`Your progress is ${ticks}.`);
+        let pick = prompt("What's your guess?");
+
+        if (pick.length > 1) {
+          alert("Please pick one letter!");
+          continue;
+        }
+        if (pattern.test(pick)) {
+          alert("Please pick a valid letter!");
+          continue;
+        }
+
+        if (randomWord.includes(pick)) {
+          alert("Correct!");
+          let indx = randomWord.indexOf(pick);
+          while (indx !== -1) {
+            ticks.splice(indx, 1, pick);
+            indx = randomWord.indexOf(pick, indx + 1);
+          }
+        } else {
+          alert("Incorrect :(");
+          tries--;
+          alert(`You have ${tries} left.`);
+        }
+
+        if (tries === 0) {
+            hasPassed = false
+          break;
+        }
+      }
+
+      if (hasPassed) {
+        alert(`Congratulations, the word was ${ticks.join('')}`);
+      } else {
+        alert("Game Over!");
+      }
+    </script>
+  </body>
+</html>
