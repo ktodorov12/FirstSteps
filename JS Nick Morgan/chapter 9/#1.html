@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> LISTING YOUR FRIENDS WITH JQUERY</title>
+</head>
+<body>
+    <h1>Hello World!</h1>
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+    <script>
+        let array = ["Joe", "Mike", "Peter", "Samuel", "Ivan"];
+        for (let i = 0; i < array.length; i++){
+            $("body").append(`<li>${array[i]}</li>`)
+            $("li").hide(100000).fadeIn(1000);
+        }
+
+        $("h1").fadeOut(3000);
+        let newText = "My friends";
+        $("h1").text(newText).fadeIn(3000)
+    </script>
+</body>
+</html>

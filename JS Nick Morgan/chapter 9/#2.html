@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAKING A HEADING FLASH</title>
+</head>
+<body>
+    <h1>MAKING A HEADING FLASH</h1>
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+    <script>
+        let fader = 1000
+        for (let i = 0; i < 5; i++){
+            $("h1").fadeOut(fader);
+            $("h1").delay(5000);
+            $("h1").fadeIn(fader)
+            fader += 1000
+        }
+    </script>
+</body>
+</html>
