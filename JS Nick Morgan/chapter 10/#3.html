@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 id="heading">MOVE IT!</h1>
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+    <script>
+      let lefty = 0;
+      let downy = 0;
+      let rigty = 200;
+      let upy = 200;
+
+      let leftInterval = setInterval(left, 10);
+      function left() {
+        $("#heading").offset({ left: lefty });
+        lefty++;
+
+        if (lefty > 200) {
+          lefty = 200;
+          downy++;
+          $("#heading").offset({ top: downy });
+
+          if (downy > 200) {
+            downy = 200;
+            rigty--;
+            $("#heading").offset({ left: rigty });
+
+            if (rigty < 0) {
+              rigty = 0;
+              upy--;
+              $("#heading").offset({ top: upy });
+
+              if (upy < 0) {
+                lefty = 0;
+                downy = 0;
+                rigty = 200;
+                upy = 200
+                leftInterval = setInterval(left, 10);
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
