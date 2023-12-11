@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <script>
+      let canvas = document.getElementById("canvas");
+      let ctx = canvas.getContext("2d");
+
+      let person = {};
+
+      function body() {
+        person.head = ctx.fillRect(100, 30, 50, 50);
+        person.neck = ctx.fillRect(120, 80, 10, 20);
+        person.body = ctx.fillRect(87, 100, 80, 80);
+        person.leftHand = ctx.fillRect(47, 100, 40, 10);
+        person.rightHand = ctx.fillRect(167, 100, 40, 10);
+        person.leftLeg = ctx.fillRect(87, 180, 20, 45);
+        person.rightLeg = ctx.fillRect(147, 180, 20, 45);
+      }
+      body();
+
+      ctx.fillStyle = "Brown";
+      person.hair = ctx.fillRect(100, 30, 50, 10);
+
+      ctx.fillStyle = "Blue";
+      person.eyes = ctx.fillRect(108, 50, 10, 10);
+      person.secondEye = ctx.fillRect(130, 50, 10, 10);
+    </script>
+  </body>
+</html>

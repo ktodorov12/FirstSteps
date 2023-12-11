@@ -36,7 +36,7 @@
         }
 
         moveRight(distance) {
-          this.x += this.distance;
+          this.x += distance;
           this.css();
         }
 
@@ -53,6 +53,13 @@
 
       let tesla = new Car(20, 20);
       let nissan = new Car(100, 200);
+      let audi = new Car(97, 400);
+
+      setInterval(function () {
+        tesla.moveRight(Math.floor(Math.random() * 6));
+        nissan.moveRight(Math.floor(Math.random() * 6));
+        audi.moveRight(Math.floor(Math.random() * 6));
+      }, 15);
     </script>
   </body>
 </html>
