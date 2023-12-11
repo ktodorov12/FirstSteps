@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find the burried treasure!</title>
+  </head>
+  <body>
+    <h1 id="heading">Find the burried treasure!</h1>
+
+    <img
+      id="map"
+      width="800"
+      height="800"
+      src="https://nostarch.com/images/treasuremap.png"
+    />
+
+    <p id="distance"></p>
+    <p id="clikcs"></p>
+
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+    <script>
+      // get random number from 0 to size
+      function getRandomNum(size) {
+        return Math.floor(Math.random() * size);
+      }
+
+      // Calculate distance between click event and target
+      function getDistance(event, target) {
+        let diffX = event.offsetX - target.x;
+        let diffY = event.offsetY - target.y;
+        return Math.sqrt(diffX * diffX + diffY * diffY);
+      }
+
+      // Get a string representing the distance
+      function getHint(distance) {
+        if (distance < 10) {
+          return "Boiling hot!";
+        } else if (distance < 20) {
+          return "Really hot";
+        } else if (distance < 40) {
+          return "Hot";
+        } else if (distance < 80) {
+          return "Warm";
+        } else if (distance < 160) {
+          return "Cold";
+        } else if (distance < 320) {
+          return "Really cold";
+        } else if (distance < 400) {
+          return "Freezing!";
+        } else if (distance < 470) {
+          return "You are about to freeze!";
+        } else if (distance < 550) {
+          return "You are like a polar bear";
+        } else {
+          return "You are on the North Pole!";
+        }
+      }
+
+      let width = 800;
+      let height = 800;
+
+      let target = {
+        x: getRandomNum(width),
+        y: getRandomNum(height),
+      };
+
+      let clikcs = 0;
+      let limiter = 90;
+
+      $("#map").click(function (event) {
+        clikcs++;
+        // Get distance between click event and target
+        let distance = getDistance(event, target);
+        // Convert distance to a hint
+        let distanceHint = getHint(distance);
+        // Updatin the p elements
+        if (clikcs < limiter) {
+          $("#distance").text(distanceHint);
+          $("#clikcs").text(`Remaining clikcs: ${limiter - clikcs}`);
+        } else {
+          $("#clikcs").text(`No more clicks!!!`);
+        }
+
+        if (distance < 8 && clikcs < limiter) {
+          alert("Found the treasure in " + clikcs + "clicks!");
+        }
+
+        if (clikcs === limiter) {
+          alert("GAME OVER!");
+        }
+      });
+    </script>
+  </body>
+</html>

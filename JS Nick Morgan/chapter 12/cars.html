@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cars</title>
+  </head>
+  <body>
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+    <script>
+      class Car {
+        constructor(x, y, speed) {
+          (this.x = x), (this.y = y), (this.speed = 30), this.drawCar();
+        }
+
+        css() {
+          this.carEl.css({
+            left: this.x,
+            top: this.y,
+          });
+        }
+
+        drawCar() {
+          let carHtml = '<img src="car.jpg">';
+
+          this.carEl = $(carHtml); //convert it from string to jQuery
+
+          this.carEl.css({
+            position: "absolute",
+            left: this.x,
+            top: this.y,
+          });
+
+          $("body").append(this.carEl);
+        }
+
+        moveRight(distance) {
+          this.x += this.distance;
+          this.css();
+        }
+
+        moveUp(distance) {
+          this.y -= distance;
+          this.css();
+        }
+
+        moveDown(distance) {
+          this.y += distance;
+          this.css();
+        }
+      }
+
+      let tesla = new Car(20, 20);
+      let nissan = new Car(100, 200);
+    </script>
+  </body>
+</html>

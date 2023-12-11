@@ -14,9 +14,21 @@
       let downy = 0;
       let rigty = 200;
       let upy = 200;
+      let clicks = 0;
 
       let leftInterval = setInterval(left, 10);
       function left() {
+
+        $("#heading").click(function (event) {
+          clicks++
+          leftInterval = setInterval(left, 15);
+
+          if (clicks === 10) {
+          clearInterval(leftInterval);
+          alert("You Win")
+        }
+        });
+
         $("#heading").offset({ left: lefty });
         lefty++;
 
@@ -39,8 +51,8 @@
                 lefty = 0;
                 downy = 0;
                 rigty = 200;
-                upy = 200
-                leftInterval = setInterval(left, 10);
+                upy = 200;
+                return setInterval(left, 10);
               }
             }
           }
