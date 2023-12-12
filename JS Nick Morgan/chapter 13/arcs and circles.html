@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <script>
+      let canvas = document.getElementById("canvas");
+      let ctx = canvas.getContext("2d");
+      ctx.lineWidth = 10;
+
+      //   //quarter circle
+      //   ctx.beginPath();
+      //   ctx.arc(50, 50, 20, 0, Math.PI / 2, false);
+      //   ctx.stroke();
+
+      //   // half circle
+      //   ctx.beginPath();
+      //   ctx.arc(100, 50, 20, 0, Math.PI);
+      //   ctx.stroke();
+
+      //   // full circle
+      //   ctx.beginPath();
+      //   ctx.arc(150, 50, 20, 0, Math.PI * 2, false);
+      //   ctx.stroke();
+
+      function circle(x, y, radius) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+        ctx.stroke();
+      }
+
+      let colors = ["Purple", "Blue", "Green", "Yellow", "Orange", "Red"];
+
+      function draw() {
+        for (let i = 10; i < 100; i += 10) {
+          let color = colors[Math.floor(Math.random() * colors.length)];
+          ctx.strokeStyle = color;
+          circle(200, 200, i);
+        }
+      }
+      setInterval(draw, 10)
+    </script>
+  </body>
+</html>

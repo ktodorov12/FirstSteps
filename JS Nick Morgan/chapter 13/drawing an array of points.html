@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <script>
+      let canvas = document.getElementById("canvas");
+      let ctx = canvas.getContext("2d");
+
+      let points = [
+        [50, 50],
+        [50, 100],
+        [25, 120],
+        [100, 50],
+        [70, 90],
+        [100, 90],
+        [70, 120],
+      ];
+
+      function drawLines() {
+        ctx.beginPath();
+        let first = points.shift();
+        ctx.moveTo(first[0], first[1]);
+        while (points.length > 0) {
+          let line = points.shift();
+          let [x, y] = line;
+          ctx.lineTo(x, y);
+        }
+
+        ctx.stroke();
+      }
+
+      drawLines();
+    </script>
+  </body>
+</html>

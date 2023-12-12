@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <script>
+      let canvas = document.getElementById("canvas");
+      let ctx = canvas.getContext("2d");
+      ctx.lineWidth = 4;
+
+      function circle(x, y, radius, isFilled) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+
+        if (isFilled) {
+          ctx.fill();
+        } else {
+          ctx.stroke();
+        }
+      }
+
+      function drawSnowman(x, y) {
+        circle(x, y, 40, false);
+        circle(x - 15, y - 10, 8, true);
+        circle(x + 15, y - 10, 8, true);
+        ctx.fillStyle = "Orange";
+        circle(x, y + 5, 8, true);
+
+        ctx.fillStyle = "Black";
+        circle(x, y + 100, 60, false);
+        circle(x, y + 70, 10, true);
+        circle(x, y + 100, 10, true);
+        circle(x, y + 130, 10, true);
+      }
+      drawSnowman(300, 400);
+    </script>
+  </body>
+</html>
