@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+    <script>
+      let canvas = document.getElementById("canvas");
+      let ctx = canvas.getContext("2d");
+
+      $("canvas").mousemove(function (event) {
+        let colors = [
+          "Blue",
+          "Green",
+          "Yellow",
+          "Red",
+          "Aquamarine",
+          "Purple",
+          "Pink",
+        ];
+        ctx.beginPath();
+        ctx.arc(event.pageX, event.pageY, 3, Math.PI * 2, false);
+        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+        ctx.fill();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Canvas Animation</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="200" height="200"></canvas>
+
+    <script>
+      let canvas = document.getElementById("canvas");
+      let ctx = canvas.getContext("2d");
+
+      function circle(x, y, radius, fillCircle) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, Math.PI * 2, false);
+
+        if (fillCircle) {
+          ctx.fill();
+        } else {
+          ctx.stroke();
+        }
+      }
+
+      function drawBee(x, y) {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "Black";
+        ctx.fillStyle = "Gold";
+
+        circle(x, y, 8, true);
+        circle(x, y, 8, false);
+
+        circle(x - 5, y - 11, 5, false);
+        circle(x + 5, y - 11, 5, false);
+
+        circle(x - 2, y - 1, 2, false);
+        circle(x + 2, y - 1, 2, false);
+      }
+
+      function update(coordinate) {
+        let offset = Math.random() * 4 - 2;
+        //gives random num between -2 and 2
+        coordinate += offset;
+
+        if (coordinate > 200) coordinate = 200;
+        if (coordinate < 0) coordinate = 0;
+
+        return coordinate;
+      }
+
+      let x = 100;
+      let y = 100;
+
+      let xX = 50;
+      let yY = 50;
+
+      setInterval(function () {
+        ctx.clearRect(0, 0, 200, 200);
+
+        drawBee(x, y);
+        x = update(x);
+        y = update(y);
+
+        drawBee(xX, yY);
+        xX = update(xX);
+        yY = update(yY);
+
+        ctx.strokeRect(0, 0, 200, 200);
+      }, 30);
+    </script>
+  </body>
+</html>
