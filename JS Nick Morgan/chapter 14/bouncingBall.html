@@ -4,11 +4,14 @@
     <title>Canvas Animation</title>
   </head>
   <body>
-    <canvas id="canvas" width="200" height="200"></canvas>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
 
     <script>
       let canvas = document.getElementById("canvas");
       let ctx = canvas.getContext("2d");
+      let width = canvas.width;
+      let height = canvas.height;
 
       class Ball {
         constructor(x, y, xSpeed, ySpeed) {
@@ -20,6 +23,7 @@
 
         drawBall() {
           ctx.beginPath();
+          ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
           ctx.arc(this.x, this.y, 3, Math.PI * 2, false);
           ctx.fill();
         }
@@ -30,30 +34,45 @@
         }
 
         checkCollision() {
-          if (this.x < 0 || this.x > 200) {
+          if (this.x < 0 || this.x > width) {
             this.xSpeed = -this.xSpeed;
           }
-          if (this.y < 0 || this.y > 200) {
+          if (this.y < 0 || this.y > height) {
             this.ySpeed = -this.ySpeed;
           }
         }
       }
 
-      let ballOne = new Ball(100, 100, -2, 3);
-      let ballTwo = new Ball(33, 10, 3, 3);
+      let random = (numRange) => {
+        let ran = Math.floor(Math.random() * numRange - 2);
+        if (ran === 0) ran = 1;
+        return ran;
+      };
+
+      let colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
+      let balls = [];
+
+      let id = setInterval(function () {
+        let ball = new Ball(random(600), random(600), random(10), random(10));
+        balls.push(ball);
+        if (balls.length > 50) clearInterval(id);
+      }, 30);
+
+      $("canvas").mousemove(function (event) {
+        let ball = new Ball(event.pageX, event.pageY, random(10), random(10));
+        balls.push(ball);
+      });
 
       setInterval(function () {
-        ctx.clearRect(0, 0, 200, 200);
+        ctx.clearRect(0, 0, width, height);
 
-        ballOne.drawBall();
-        ballOne.move();
-        ballOne.checkCollision();
+        balls.forEach((ball) => {
+          ball.drawBall();
+          ball.move();
+          ball.checkCollision();
+        });
 
-        ballTwo.drawBall();
-        ballTwo.move();
-        ballTwo.checkCollision();
-
-        ctx.strokeRect(0, 0, 200, 200);
+        ctx.strokeRect(0, 0, width, height);
       }, 30);
     </script>
   </body>

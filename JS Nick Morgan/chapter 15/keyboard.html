@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Keyboard input</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+    <script>
+      let canvas = document.getElementById("canvas");
+      let ctx = canvas.getContext("2d");
+      let width = canvas.width;
+      let height = canvas.height;
+
+      class Ball {
+        constructor() {
+          this.x = width / 2;
+          this.y = height / 2;
+          this.xSpeed = 5;
+          this.ySpeed = 0;
+        }
+
+        move() {
+          this.x += this.xSpeed;
+          this.y += this.ySpeed;
+        }
+
+        checkCollision() {
+          if (this.x < 0 || this.x > width) {
+            this.xSpeed = -this.xSpeed;
+          }
+          if (this.y < 0 || this.y > height) {
+            this.ySpeed = -this.ySpeed;
+          }
+        }
+
+        draw() {
+          circle(this.x, this.y, 10, true);
+        }
+
+        setDirection(direction) {
+          switch (direction) {
+            case "up":
+              this.xSpeed = 0;
+              this.ySpeed = -5;
+              break;
+            case "down":
+              this.xSpeed = 0;
+              this.ySpeed = 5;
+              break;
+            case "left":
+              this.xSpeed = -5;
+              this.ySpeed = 0;
+              break;
+            case "right":
+              this.xSpeed = 5;
+              this.ySpeed = 0;
+              break;
+            case "stop":
+              this.xSpeed = 0;
+              this.ySpeed = 0;
+              break;
+            case "smaller":
+              this.x -= 1;
+              this.y -= 1;
+              break;
+          }
+        }
+      }
+
+      function circle(x, y, radius, fillCircle) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, Math.PI * 2, false);
+        if (fillCircle) {
+          ctx.fill();
+        } else {
+          ctx.stroke();
+        }
+      }
+
+      let ball = new Ball();
+
+      let keyActions = {
+        32: "stop",
+        37: "left",
+        38: "up",
+        39: "right",
+        40: "down",
+        90: "speedDown",
+        88: "speedUp",
+        67: "smaller",
+        86: "larger",
+      };
+
+      $("body").keydown(function (event) {
+        console.log(event.keyCode);
+        let direction = keyActions[event.keyCode];
+        ball.setDirection(direction);
+      });
+
+      setInterval(function () {
+        ctx.clearRect(0, 0, width, height);
+
+        ball.draw();
+        ball.move();
+        ball.checkCollision();
+
+        ctx.strokeRect(0, 0, width, height);
+      }, 30);
+    </script>
+  </body>
+</html>
