@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Game</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+    <p id="lives"></p>
+    <p id="blocks"></p>
+
+    <script>
+      let canvas = document.getElementById("canvas");
+      let ctx = canvas.getContext("2d");
+      let width = canvas.width;
+      let height = canvas.height;
+
+      let lives = 3;
+      let lost = false;
+      let xSpeed = [3, -3, 4, -4];
+      $("#lives").text(`Lives left: ${lives}`);
+
+      let blocks = 30;
+      $("#blocks").text(`Blocks Left: ${blocks}`);
+
+      function gameOver() {
+        clearInterval(idInterval);
+        ctx.font = "60px Courier";
+        ctx.fillStyle = "Black";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("Game Over", width / 2, height / 2);
+      }
+
+      class Bar {
+        constructor() {
+          this.positionX = width / 2;
+          this.positionY = height - 20;
+
+          this.lengthOfLine = Math.floor(width / 4);
+          this.half = this.lengthOfLine / 2;
+          this.leftStart = this.positionX - this.half;
+        }
+        drawBar() {
+          ctx.lineWidth = 10;
+
+          ctx.beginPath();
+          ctx.moveTo(this.leftStart, this.positionY);
+          ctx.lineTo(this.leftStart + this.lengthOfLine, this.positionY);
+          ctx.stroke();
+        }
+
+        setDirection(direction) {
+          switch (direction) {
+            case "left":
+              this.leftStart -= 7;
+              break;
+            case "right":
+              this.leftStart += 7;
+          }
+
+          if (this.leftStart < 6) {
+            this.leftStart += 2;
+          } else if (this.leftStart + this.lengthOfLine > width - 6) {
+            this.leftStart -= 2;
+          }
+        }
+      }
+
+      class Ball {
+        constructor() {
+          this.x = width / 2;
+          this.y = height / 2;
+          this.xSpeed = xSpeed[Math.floor(Math.random() * 4)];
+          this.ySpeed = 3;
+        }
+
+        drawBall() {
+          ctx.beginPath();
+          ctx.lineWidth = 3;
+          ctx.arc(this.x, this.y, 5, Math.PI * 2, false);
+          ctx.fill();
+        }
+
+        move() {
+          this.x += this.xSpeed;
+          this.y += this.ySpeed;
+        }
+
+        checkCollision() {
+          if (this.x < 6 || this.x > width - 6) {
+            this.xSpeed = -this.xSpeed;
+          }
+          if (this.y < 6 || this.y > width - 6) {
+            this.ySpeed = -this.ySpeed;
+          }
+          if (this.y > height - 6) {
+            lives--;
+
+            this.x = width / 2;
+            this.y = height / 2;
+            this.xSpeed = xSpeed[Math.floor(Math.random() * 4)];
+            this.ySpeed = 3;
+            $("#lives").text(`Lives left: ${lives}`);
+            this.drawBall();
+
+            if (lives === 0) {
+              gameOver();
+            }
+          }
+        }
+
+        barCollision() {
+          if (this.y + 6 > bar.positionY) {
+            if (
+              this.x > bar.leftStart - 6 &&
+              this.x < bar.leftStart + bar.lengthOfLine
+            ) {
+              this.ySpeed = -this.ySpeed;
+            }
+          }
+        }
+      }
+
+      class Lines {
+        constructor(x, y) {
+          this.x = x;
+          this.y = y;
+          this.lengthOfLine = Math.floor(width / 8);
+        }
+        drawLine(x, y) {
+          ctx.lineWidth = 10;
+
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + this.lengthOfLine, y);
+          ctx.stroke();
+        }
+
+        ballCollision() {
+          if (ball.y - 6 < this.y) {
+            if (ball.x > this.x - 6 && ball.x < this.x + this.lengthOfLine) {
+              ball.ySpeed = -ball.ySpeed;
+              return true;
+            }
+          }
+        }
+      }
+
+      let bar = new Bar();
+      let ball = new Ball();
+      let lines = [[], [], [], [], []];
+
+      function allLines() {
+        function drawing(ind) {
+          let x = 25;
+          for (let i = 0; i < 6; i++) {
+            let currLine = new Lines(x, y);
+            lines[ind].push(currLine);
+            let space = currLine.lengthOfLine + 10;
+            x += space;
+          }
+        }
+        let y = 100;
+        drawing(0);
+        y = 80;
+        drawing(1);
+        y = 60;
+        drawing(2);
+        y = 40;
+        drawing(3);
+        y = 20;
+        drawing(4);
+      }
+      allLines();
+
+      $("body").keydown(function (event) {
+        let movements = {
+          37: "left",
+          39: "right",
+        };
+        let direction = movements[event.keyCode];
+        bar.setDirection(direction);
+      });
+
+      let idInterval = setInterval(function () {
+        ctx.clearRect(0, 0, width, height);
+
+        //moving the Bar
+        bar.drawBar();
+        bar.setDirection();
+
+        //moving the Ball
+        ball.drawBall();
+        ball.move();
+        ball.checkCollision();
+        ball.barCollision();
+
+        //controling lines
+        lines.forEach((line) => {
+          line.forEach((subLine) => {
+            subLine.drawLine(subLine.x, subLine.y);
+            let check = subLine.ballCollision();
+            if (check) {
+              delete subLine.x;
+              delete subLine.y;
+              blocks--;
+            }
+          });
+        });
+
+        ctx.lineWidth = 10;
+        ctx.strokeRect(0, 0, width, height);
+      }, 30);
+    </script>
+  </body>
+</html>

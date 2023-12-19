@@ -19,6 +19,7 @@
           this.y = height / 2;
           this.xSpeed = 5;
           this.ySpeed = 0;
+          this.speed = 5;
         }
 
         move() {
@@ -43,27 +44,23 @@
           switch (direction) {
             case "up":
               this.xSpeed = 0;
-              this.ySpeed = -5;
+              this.ySpeed = -this.speed;
               break;
             case "down":
               this.xSpeed = 0;
-              this.ySpeed = 5;
+              this.ySpeed = this.speed;
               break;
             case "left":
-              this.xSpeed = -5;
+              this.xSpeed = -this.speed;
               this.ySpeed = 0;
               break;
             case "right":
-              this.xSpeed = 5;
+              this.xSpeed = this.speed;
               this.ySpeed = 0;
               break;
             case "stop":
               this.xSpeed = 0;
               this.ySpeed = 0;
-              break;
-            case "smaller":
-              this.x -= 1;
-              this.y -= 1;
               break;
           }
         }
@@ -87,6 +84,8 @@
         38: "up",
         39: "right",
         40: "down",
+      };
+      let specialKeys = {
         90: "speedDown",
         88: "speedUp",
         67: "smaller",
@@ -96,6 +95,7 @@
       $("body").keydown(function (event) {
         console.log(event.keyCode);
         let direction = keyActions[event.keyCode];
+        let special = specialKeys[event.keyCode];
         ball.setDirection(direction);
       });
 
@@ -104,6 +104,7 @@
 
         ball.draw();
         ball.move();
+        ball.setDirection();
         ball.checkCollision();
 
         ctx.strokeRect(0, 0, width, height);

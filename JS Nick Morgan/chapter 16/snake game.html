@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SSnake</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+    <script>
+      let canvas = document.getElementById("canvas");
+      let ctx = canvas.getContext("2d");
+      let width = canvas.width;
+      let height = canvas.height;
+
+      let score = 0;
+      let blockSize = 10;
+      let widthInBlocks = width / blockSize;
+      let heightInBlocks = height / blockSize;
+
+      let animationTime = 100;
+      let lost = false;
+
+      function drawBorder() {
+        ctx.fillStyle = "Gray";
+        ctx.fillRect(0, 0, width, blockSize);
+        ctx.fillRect(0, height - blockSize, width, blockSize);
+        ctx.fillRect(0, 0, blockSize, height);
+        ctx.fillRect(width - blockSize, 0, blockSize, height);
+      }
+
+      function drawScore() {
+        ctx.font = "20px Courier";
+        ctx.fillStyle = "Black";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.fillText(`Score: ${score}`, blockSize, blockSize);
+      }
+
+      function gameOver() {
+        ctx.font = "60px Courier";
+        ctx.fillStyle = "Black";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("Game Over", width / 2, height / 2);
+      }
+
+      class Block {
+        constructor(col, row) {
+          this.col = col;
+          this.row = row;
+        }
+
+        drawSquare(color) {
+          let x = this.col * blockSize;
+          let y = this.row * blockSize;
+
+          ctx.fillStyle = color;
+          ctx.fillRect(x, y, blockSize, blockSize);
+        }
+
+        drawCircle(color) {
+          let centerX = this.col * blockSize + blockSize / 2;
+          let centerY = this.row * blockSize + blockSize / 2;
+
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, 3, Math.PI * 2, false);
+          ctx.fill();
+        }
+
+        equal(otherBlock) {
+          return this.col === otherBlock.col && this.row === otherBlock.row;
+        }
+      }
+
+      class Snake {
+        constructor() {
+          this.segments = [new Block(7, 5), new Block(6, 5), new Block(5, 5)];
+          this.direction = "right";
+          this.nextDirection = "right";
+        }
+
+        draw() {
+          for (let i = 0; i < this.segments.length; i++) {
+            let color;
+            if (i === 0) {
+              color = "Green";
+            } else if (i % 2 === 0) {
+              color = "Black";
+            } else {
+              color = "Red";
+            }
+            this.segments[i].drawSquare(color);
+          }
+        }
+
+        move() {
+          let head = this.segments[0];
+          let newHead;
+
+          this.direction = this.nextDirection;
+
+          switch (this.direction) {
+            case "right":
+              newHead = new Block(head.col + 1, head.row);
+              break;
+            case "down":
+              newHead = new Block(head.col, head.row + 1);
+              break;
+            case "left":
+              newHead = new Block(head.col - 1, head.row);
+              break;
+            case "up":
+              newHead = new Block(head.col, head.row - 1);
+              break;
+          }
+
+          if (this.checkCollision(newHead)) {
+            lost = true;
+            gameOver();
+            return;
+          }
+
+          this.segments.unshift(newHead);
+
+          if (newHead.equal(apple.position)) {
+            score++;
+            animationTime -= 1.7;
+            apple.move();
+          } else {
+            this.segments.pop();
+          }
+        }
+
+        checkCollision(head) {
+          let leftCollison = head.col === 0;
+          let topCollision = head.row === 0;
+          let rightCollision = head.col === widthInBlocks - 1;
+          let bottomCollision = head.row === heightInBlocks - 1;
+
+          let wallCollision =
+            leftCollison || topCollision || rightCollision || bottomCollision;
+
+          let selfCollision = false;
+
+          for (let i = 0; i < this.segments.length; i++) {
+            if (head.equal(this.segments[i])) {
+              selfCollision = true;
+            }
+          }
+
+          return wallCollision || selfCollision;
+        }
+
+        setDirection(newDirection) {
+          if (this.direction === "up" && newDirection === "down") {
+            return;
+          } else if (this.direction === "right" && newDirection === "left") {
+            return;
+          } else if (this.direction === "down" && newDirection === "up") {
+            return;
+          } else if (this.direction === "left" && newDirection === "right") {
+            return;
+          }
+          this.nextDirection = newDirection;
+        }
+      }
+
+      class Apple {
+        constructor() {
+          this.position = new Block(10, 10);
+        }
+
+        drawApple() {
+          this.position.drawCircle("LimeGreen");
+        }
+
+        move() {
+          let randomCol = Math.floor(Math.random() * (widthInBlocks - 2) + 1);
+          let randomRow = Math.floor(Math.random() * (heightInBlocks - 2) + 1);
+          this.position = new Block(randomCol, randomRow);
+        }
+      }
+
+      let snake = new Snake();
+      let apple = new Apple();
+
+      let movements = {
+        37: "left",
+        38: "up",
+        39: "right",
+        40: "down",
+      };
+
+      $("body").keydown(function (event) {
+        let direction = movements[event.keyCode];
+        if (direction !== undefined) {
+          snake.setDirection(direction);
+        }
+      });
+
+      function gameLoop() {
+        ctx.clearRect(0, 0, width, height);
+
+        //snake
+        snake.move();
+        snake.draw();
+
+        //apple
+        apple.drawApple();
+
+        drawScore();
+        drawBorder();
+        if (lost) return;
+        setTimeout(gameLoop, animationTime);
+      }
+      gameLoop();
+    </script>
+  </body>
+</html>
