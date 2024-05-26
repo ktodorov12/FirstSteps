@@ -23,11 +23,19 @@ connectToDb((err) => {
 
 //routes
 app.get("/books", (req, res) => {
+  //current page
+  const { page } = req.query || 0;
+  const booksPage = 3;
+
   let books = [];
 
   db.collection("books")
     .find() //cursor
     .sort({ author: 1 }) //cursor
+    //pagination
+    .skip(page * booksPage)
+    .limit(booksPage)
+    //
     .forEach((book) => books.push(book))
     .then(() => {
       res.json(books);
@@ -92,11 +100,11 @@ app.patch("/books/:bookId", (req, res) => {
   if (!ObjectId.isValid(bookId)) {
     return res.status(500).json({ error: "Not a valid doc id" });
   }
-  
+
   db.collection("books")
-    .updateOne({_id: new ObjectId(bookId)}, {$set: data})
-    .then(updated => {
-        res.json(updated)
+    .updateOne({ _id: new ObjectId(bookId) }, { $set: data })
+    .then((updated) => {
+      res.json(updated);
     })
     .catch((err) => {
       res.json(err);
