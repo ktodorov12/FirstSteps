@@ -67,3 +67,20 @@ app.post("/books", (req, res) => {
       res.status(500).json({ err });
     });
 });
+
+app.delete("/books/:bookId", (req, res) => {
+  const { bookId } = req.params;
+
+  if (!ObjectId.isValid(bookId)) {
+    return res.status(500).json({ error: "Not a valid doc id" });
+  }
+
+  db.collection("books")
+    .deleteOne({ _id: new ObjectId(bookId) })
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
