@@ -1,5 +1,6 @@
 const express = require("express");
 const { connectToDb, getDb } = require("./db");
+const { ObjectId } = require("mongodb");
 
 //init app & middleware
 const app = express();
@@ -32,5 +33,22 @@ app.get("/books", (req, res) => {
     })
     .catch(() => {
       res.status(500).json({ error: "Could not fetch documetns" });
+    });
+});
+
+app.get("/books/:bookId", (req, res) => {
+  const { bookId } = req.params;
+
+  if (!ObjectId.isValid(bookId)) {
+    return res.status(500).json({ error: "Not a valid doc id" });
+  }
+
+  db.collection("books")
+    .findOne({ _id: new ObjectId(bookId) })
+    .then((doc) => {
+      res.json(doc);
+    })
+    .catch(() => {
+      res.status(500).json({ error: "Could not fetch single doc" });
     });
 });
