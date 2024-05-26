@@ -84,3 +84,21 @@ app.delete("/books/:bookId", (req, res) => {
       res.json(err);
     });
 });
+
+app.patch("/books/:bookId", (req, res) => {
+  const { bookId } = req.params;
+  const data = req.body;
+
+  if (!ObjectId.isValid(bookId)) {
+    return res.status(500).json({ error: "Not a valid doc id" });
+  }
+  
+  db.collection("books")
+    .updateOne({_id: new ObjectId(bookId)}, {$set: data})
+    .then(updated => {
+        res.json(updated)
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
