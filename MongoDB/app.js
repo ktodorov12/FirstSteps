@@ -4,6 +4,7 @@ const { ObjectId } = require("mongodb");
 
 //init app & middleware
 const app = express();
+app.use(express.json()); // parses json coming in the request
 const port = 5000;
 
 //db conncetion
@@ -50,5 +51,19 @@ app.get("/books/:bookId", (req, res) => {
     })
     .catch(() => {
       res.status(500).json({ error: "Could not fetch single doc" });
+    });
+});
+
+app.post("/books", (req, res) => {
+  const data = req.body;
+  console.log(data);
+
+  db.collection("books")
+    .insertOne(data)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.status(500).json({ err });
     });
 });
