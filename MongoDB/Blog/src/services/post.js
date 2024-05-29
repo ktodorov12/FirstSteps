@@ -32,4 +32,7 @@ module.exports = {
         console.log(error);
     }
   },
+  getById: async (id) => {
+    return await Post.findById(id);
+  } 
 };
