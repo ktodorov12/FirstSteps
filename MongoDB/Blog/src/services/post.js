@@ -12,13 +12,12 @@ module.exports = {
     let perPage = 5;
     let page = query || 1;
 
-    
     try {
-        const data = await Post.aggregate([{ $sort: { createdAt: -1 } }])
+      const data = await Post.aggregate([{ $sort: { createdAt: -1 } }])
         .skip(perPage * page - perPage)
         .limit(perPage)
         .exec();
-        
+
       const count = await Post.countDocuments();
       const nextPage = Number(page) + 1;
       const hasNextPage = nextPage <= Math.ceil(count / perPage);
@@ -29,10 +28,20 @@ module.exports = {
         nextPage: hasNextPage ? nextPage : null,
       };
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   },
   getById: async (id) => {
     return await Post.findById(id);
-  } 
+  },
+  search: async (query) => {
+    const sanitized = query.replace(/[^a-zA-Z0-9]/g, "");
+    const data = Post.find({
+      $or: [
+        { title: { $regex: new RegExp(sanitized, "i") } }, 
+        { body: { $regex: new RegExp(sanitized, "i") } }
+      ],
+    });
+    return data;
+  },
 };

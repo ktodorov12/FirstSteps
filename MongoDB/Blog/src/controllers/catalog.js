@@ -1,4 +1,4 @@
-const { dataPagination, getById } = require("../services/post");
+const { dataPagination, getById, search } = require("../services/post");
 
 module.exports = {
   home: async (req, res) => {
@@ -13,5 +13,11 @@ module.exports = {
   details: async (req, res) => {
     const data = await getById(req.params.id);
     res.render("post", { data });
+  },
+  searchView: async (req, res) => {
+    const { query } = req.query;
+    const data = await search(query)
+
+    res.render("search", { data });
   },
 };
