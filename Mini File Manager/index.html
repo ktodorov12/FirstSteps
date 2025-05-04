@@ -36,7 +36,7 @@
 
     <script>
       async function refreshFolders() {
-        const res = await fetch("/folders");
+        const res = await fetch("http://127.0.0.1:3000/folders");
         const folders = await res.json();
         const container = document.getElementById("folderView");
         container.innerHTML = "";
@@ -61,7 +61,7 @@
       document.getElementById("folderForm").addEventListener("submit", async (e) => {
         e.preventDefault();
         const name = document.getElementById("folderName").value;
-        await fetch("/folders", {
+        await fetch("http://127.0.0.1:3000/folders", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name }),

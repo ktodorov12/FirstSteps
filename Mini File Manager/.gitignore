@@ -1,1 +1,5 @@
 node_modules
+
+# All file operations will be done in a directory 
+# on your server — e.g., a storage/ folder.
+storage 
