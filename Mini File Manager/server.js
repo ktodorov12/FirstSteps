@@ -29,7 +29,16 @@ server.on(
     }
 
     if (endpoint == "/folders" && method == "GET") {
-      // Return the folder + file structure (optional recursive).
+      try {
+        const folders = await fsPromises.readdir(folderPathname, { withFileTypes: true });
+        await getFoldersAndFiles(folders);
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(folders));
+      } catch (error) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Bad request" }));
+      }
     } else if (endpoint == "/folders" && method == "POST") {
       let body = [];
 
@@ -48,7 +57,7 @@ server.on(
             const newFolderPath = path.join(folderPathname, name);
 
             // Create the directory
-            await fsPromises.mkdir(newFolderPath, { recursive: true });
+            await fsPromises.mkdir(newFolderPath, { recursive: false });
 
             // Send success response
             res.writeHead(201, { "Content-Type": "application/json" });
@@ -106,3 +115,26 @@ The last parameter callback will be added as a listener for the 'listening' even
   .listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
   });
+
+async function getFoldersAndFiles(folders, i = 0) {
+  if (i >= folders.length) {
+    return folders;
+  }
+
+  const pathInside = path.join(folders[i].path, folders[i].name);
+  const isDirectory = (await fsPromises.stat(pathInside)).isDirectory();
+
+  if (isDirectory) {
+    const insideContent = await fsPromises.readdir(pathInside, {
+      withFileTypes: true,
+    });
+    folders[i] = {
+      name: folders[i].name,
+      files: insideContent.map((file) => file.name),
+    };
+
+    await getFoldersAndFiles(insideContent, 0);
+  }
+
+  return await getFoldersAndFiles(folders, i + 1);
+}
