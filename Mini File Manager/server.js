@@ -1,6 +1,7 @@
 const { createServer } = require("node:http");
 const path = require("node:path");
 const fsPromises = require("node:fs/promises");
+const fs = require("fs");
 
 const hostname = "127.0.0.1";
 const port = 3000;
@@ -81,8 +82,18 @@ server.on(
         });
     } else if (endpoint == "/upload/:folderName" && method == "POST") {
       // Upload a file into the selected folder.
-    } else if (endpoint == "/download/:folderName/:fileName" && method == "GET") {
-      // Download the requested file.
+    } else if (endpoint.startsWith("/download") && method == "GET") {
+      const [parentPath, filePath] = endpoint
+        .split("/")
+        .filter((x) => x !== "" && x !== "download");
+      const fileUrl = path.join(folderPathname, parentPath, filePath);
+
+      const stream = fs.createReadStream(fileUrl);
+      res.writeHead(200, {
+        "Content-Disposition": `attachment; filename="${path.basename(filePath)}"`,
+        "Content-Type": "application/pdf",
+      });
+      stream.pipe(res);
     } else {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Bad request" }));

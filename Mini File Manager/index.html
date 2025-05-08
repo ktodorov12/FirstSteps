@@ -48,10 +48,32 @@
           if (folder.files) {
             folder.files.forEach((file) => {
               const link = document.createElement("a");
-              link.href = `/download/${folder.name}/${file}`;
+              const linkUrl = `/download/${folder.name}/${file}`;
+              link.href = linkUrl;
               link.innerText = file;
               link.className = "file";
               link.style.display = "block";
+              link.addEventListener("click", async (e) => {
+                e.preventDefault();
+                try {
+                  const response = await fetch(`http://127.0.0.1:3000${linkUrl}`);
+                  const blob = await response.blob();
+                  const url = window.URL.createObjectURL(blob);
+
+                  const tempLink = document.createElement("a");
+                  tempLink.href = url;
+                  tempLink.download = file;
+                  document.body.appendChild(tempLink);
+                  tempLink.click();
+
+                  // Clean up
+                  document.body.removeChild(tempLink);
+                  window.URL.revokeObjectURL(url);
+                } catch (error) {
+                  console.error("Download error:", error);
+                  alert("Failed to download the file. Please try again.");
+                }
+              });
               div.appendChild(link);
             });
           }
