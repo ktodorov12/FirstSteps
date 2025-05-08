@@ -2,6 +2,7 @@ const { createServer } = require("node:http");
 const path = require("node:path");
 const fsPromises = require("node:fs/promises");
 const fs = require("fs");
+const { EOL } = require("os");
 
 const hostname = "127.0.0.1";
 const port = 3000;
@@ -80,13 +81,62 @@ server.on(
           res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "Bad request" }));
         });
-    } else if (endpoint == "/upload/:folderName" && method == "POST") {
-      // Upload a file into the selected folder.
+    } else if (endpoint.startsWith("/upload") && method == "POST") {
+      const folderName = endpoint.split("/").at(2);
+      const folderPath = path.join(folderPathname, folderName);
+
+      try {
+        await fsPromises.mkdir(folderPath, { recursive: true });
+
+        const data = [];
+        req
+          .on("data", (chunk) => {
+            data.push(chunk);
+          })
+          .on("end", async () => {
+            const parsedData = Buffer.concat(data).toString("binary");
+            const boundry = req.headers["content-type"].match("boundary=(.+)").at(1);
+
+            const allFormData = parsedData.split(`--${boundry}`);
+
+            const obj = {};
+            for (let el of allFormData) {
+              const [metaData, value] = el.split(EOL + EOL);
+
+              const key = metaData.split("name=").at(1)?.split('"').at(1);
+              if (!key) continue;
+
+              obj[key] = value.trim();
+
+              if (metaData.includes("filename")) {
+                obj.filename = metaData.match(`filename="(.+)"`)?.at(1);
+              }
+            }
+
+            const { file, filename } = obj;
+            const encodedFilename = encodeURIComponent(filename);
+            const newFilePath = path.join(folderPath, encodedFilename);
+
+            try {
+              await fsPromises.writeFile(newFilePath, file, "binary");
+            } catch (error) {
+              console.log(error);
+            }
+
+            res.end();
+          })
+          .on("error", (error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Bad request" }));
+      }
     } else if (endpoint.startsWith("/download") && method == "GET") {
       const [parentPath, filePath] = endpoint
         .split("/")
         .filter((x) => x !== "" && x !== "download");
-      const fileUrl = path.join(folderPathname, parentPath, filePath);
+      const fileUrl = path.normalize(path.join(folderPathname, parentPath, filePath));
 
       const stream = fs.createReadStream(fileUrl);
       res.writeHead(200, {
