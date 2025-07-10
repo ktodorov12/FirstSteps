@@ -85,6 +85,10 @@ export default class Character {
   equipItem(item) {
     const { bodyPart } = item;
 
+    if (this.equippedItems.hasOwnProperty(bodyPart) || this.hasOwnProperty(item.statType)) {
+      throw new Error("Ivalid!");
+    }
+
     const currentItem = this.equippedItems[bodyPart];
 
     this[item.statType] -= currentItem.stat;
@@ -95,6 +99,10 @@ export default class Character {
 
   unequipItem(item) {
     const { bodyPart } = item;
+
+    if (this.equippedItems.hasOwnProperty(bodyPart) || this.hasOwnProperty(item.statType)) {
+      throw new Error("Ivalid!");
+    }
 
     const currentItem = this.equippedItems[bodyPart];
 
@@ -144,7 +152,8 @@ export default class Character {
         console.log(`Your ${skill.statType} went up to ${this[skill.statType]}`);
       } else {
         const validStats = ["physicalDamage", "magicPower"];
-        if (!validStats.includes(skill.statType)) throw new Error("Invalid target! Cannot use this skill against enemies");
+        if (!validStats.includes(skill.statType))
+          throw new Error("Invalid target! Cannot use this skill against enemies");
 
         console.log(`${this.name} uses ${skill} against ${target.name}`);
         target.takeDamage(this[skill.statType]);
