@@ -1,8 +1,8 @@
 /*
 ===== STAT TYPES =====
-  - physicalDammage
+  - physicalDamage
   - magicPower
-  - deffence
+  - defense
   - health
   - mana
 
@@ -16,21 +16,21 @@ export default class Character {
     name,
     health,
     mana,
-    physicalDammage,
+    physicalDamage,
     magicPower,
-    deffence,
+    defense,
     inventory,
     skills
   ) {
     this.name = name;
     this.health = health;
     this.mana = mana;
-    this.physicalDammage = physicalDammage;
+    this.physicalDamage = physicalDamage;
     this.magicPower = magicPower;
-    this.deffence = deffence;
+    this.defense = defense;
     this.inventory = inventory;
     this.skills = skills;
-    this.equipedItems = {
+    this.equippedItems = {
       leftHand: { stat: 0 },
       rightHand: { stat: 0 },
       head: { stat: 0 },
@@ -85,28 +85,28 @@ export default class Character {
   equipItem(item) {
     const { bodyPart } = item;
 
-    const currentItem = this.equipedItems[bodyPart];
+    const currentItem = this.equippedItems[bodyPart];
 
     this[item.statType] -= currentItem.stat;
     this[item.statType] += item.stat;
 
-    this.equipedItems[bodyPart] = item;
+    this.equippedItems[bodyPart] = item;
   }
 
   unequipItem(item) {
     const { bodyPart } = item;
 
-    const currentItem = this.equipedItems[bodyPart];
+    const currentItem = this.equippedItems[bodyPart];
 
     this[item.statType] -= currentItem.stat;
 
-    this.equipedItems[bodyPart] = { stat: 0 };
+    this.equippedItems[bodyPart] = { stat: 0 };
   }
 
   useWeapon(target) {
     console.log(`${this.name} attacks ${target.name}!`);
 
-    target.takeDamage(this.physicalDammage);
+    target.takeDamage(this.physicalDamage);
     return this;
   }
 
@@ -143,7 +143,7 @@ export default class Character {
         console.log(`You used ${skill.name}.`);
         console.log(`Your ${skill.statType} went up to ${this[skill.statType]}`);
       } else {
-        const validStats = ["physicalDammage", "magicPower"];
+        const validStats = ["physicalDamage", "magicPower"];
         if (!validStats.includes(skill.statType)) throw new Error("Invalid target! Cannot use this skill against enemies");
 
         console.log(`${this.name} uses ${skill} against ${target.name}`);
@@ -170,10 +170,10 @@ export default class Character {
   }
 
   takeDamage(damage) {
-    const damageDone = damage - this.deffence;
+    const damageDone = damage - this.defense;
     if (damageDone <= 0) {
       console.log("This attack was unnefective!");
-      console.log(`Your power: ${damage}/ Foe's deffence ${this.deffence}.`);
+      console.log(`Your power: ${damage}/ Foe's defense ${this.defense}.`);
       return;
     }
 

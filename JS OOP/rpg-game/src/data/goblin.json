@@ -3,16 +3,16 @@
     "name": "Grub",
     "health": 90,
     "mana": 50,
-    "physicalDammage": 35,
+    "physicalDamage": 35,
     "magicPower": 10,
-    "deffence": 20
+    "defense": 20
   },
   "itemsData": [
     {
       "type": "dagger",
       "name": "Rusty Dagger",
       "stat": 8,
-      "statType": "physicalDammage",
+      "statType": "physicalDamage",
       "bodyPart": "rightHand",
       "rarity": "common"
     },
@@ -20,13 +20,13 @@
       "type": "leather",
       "name": "Patchy Vest",
       "stat": 5,
-      "statType": "deffence",
+      "statType": "defense",
       "bodyPart": "body",
       "rarity": "common"
     }
   ],
   "skillsData": [
-    { "name": "Sneaky Stab", "manaCost": 5, "stat": 20, "statType": "physicalDammage" },
-    { "name": "Quick Escape", "manaCost": 10, "stat": 0, "statType": "deffence" }
+    { "name": "Sneaky Stab", "manaCost": 5, "stat": 20, "statType": "physicalDamage" },
+    { "name": "Quick Escape", "manaCost": 10, "stat": 0, "statType": "defense" }
   ]
 }

@@ -3,9 +3,9 @@
     "name": "Gandor",
     "health": 120,
     "mana": 250,
-    "physicalDammage": 30,
+    "physicalDamage": 30,
     "magicPower": 120,
-    "deffence": 40
+    "defense": 40
   },
   "itemsData": [
     {
@@ -20,7 +20,7 @@
       "type": "robe",
       "name": "Apprentice Robe",
       "stat": 15,
-      "statType": "deffence",
+      "statType": "defense",
       "bodyPart": "body",
       "rarity": "common"
     },
@@ -28,7 +28,7 @@
       "type": "hat",
       "name": "Pointy Hat",
       "stat": 5,
-      "statType": "deffence",
+      "statType": "defense",
       "bodyPart": "head",
       "rarity": "common"
     }
