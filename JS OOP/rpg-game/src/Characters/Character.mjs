@@ -75,8 +75,8 @@ export default class Character {
           );
         }, item.statusEffectLength * 1000);
       }
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error(error);
     }
 
     return this;
@@ -110,31 +110,63 @@ export default class Character {
     return this;
   }
 
+  learnSkill(skill) {
+    try {
+      this.skills.learnSkill(skill);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  forgetSkill(skill) {
+    try {
+      this.skills.forgetSkill(skill);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   castSkill(skill, target) {
-    if (!this.skills.find((s) => s.name == skill.name)) {
-      throw new Error("You don't know this skill!");
-    }
+    try {
+      this.skills.knowsSkill(skill);
 
-    if (this.mana < skill.manaCost) {
-      throw new Error(
-        `Not enough mana!\n 
-        You have ${this.mana}, but need ${skill.manaCost} to use ${skill.name}`
-      );
-    }
+      if (this.mana < skill.manaCost) {
+        throw new Error(
+          `Not enough mana!\n 
+          You have ${this.mana}, but need ${skill.manaCost} to use ${skill.name}`
+        );
+      }
 
-    // TODO: change logic so skill that boosts attack/deffence can be used
-    this.mana -= skill.manaCost;
-    let statToIncrease;
-    if (skill.statType == "physicalDammage") {
-      statToIncrease = "physicalDammage";
-    } else {
-      statToIncrease = "magicPower";
-    }
+      this[skill.statType] += skill.stat;
 
-    this[statToIncrease] += skill.stat;
-    // TODO: add logic for eventual item use (like potion) that increases attack
-    target.takeDamage(this[statToIncrease]);
-    this[statToIncrease] -= skill.stat;
+      if (target === this) {
+        console.log(`You used ${skill.name}.`);
+        console.log(`Your ${skill.statType} went up to ${this[skill.statType]}`);
+      } else {
+        const validStats = ["physicalDammage", "magicPower"];
+        if (!validStats.includes(skill.statType)) throw new Error("Invalid target! Cannot use this skill against enemies");
+
+        console.log(`${this.name} uses ${skill} against ${target.name}`);
+        target.takeDamage(this[skill.statType]);
+      }
+
+      this.mana -= skill.manaCost;
+      console.log(`Your mana was decreased to ${this.mana}`);
+
+      // TODO: add logic for damage effect of skills (e.g. burn, poison, etc.)
+      if (skill.statusEffectLength) {
+        setTimeout(() => {
+          this[skill.statType] -= skill.stat;
+          console.log(
+            `${skill.name}'s effect wore off. Your ${skill.statType} is now ${
+              this[skill.statType]
+            }`
+          );
+        }, skill.statusEffectLength * 1000);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   takeDamage(damage) {

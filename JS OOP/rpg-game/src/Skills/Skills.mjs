@@ -20,4 +20,10 @@ export default class Skills {
 
     delete this.skills[skill.name];
   }
+
+  knowsSkill(skill) {
+    if (!this.skills[skill.name]) {
+      throw new Error(`${skill.name} you don't know that skill!`);
+    }
+  }
 }
