@@ -1,0 +1,40 @@
+{
+  "characterData": {
+    "name": "Gandor",
+    "health": 120,
+    "mana": 250,
+    "basePhysicalAttack": 30,
+    "baseMagicPower": 120,
+    "baseDeffence": 40
+  },
+  "itemsData": [
+    {
+      "type": "staff",
+      "name": "Oak Staff",
+      "stat": 20,
+      "statType": "magic",
+      "bodyPart": "rightHand",
+      "rarity": "common"
+    },
+    {
+      "type": "robe",
+      "name": "Apprentice Robe",
+      "stat": 15,
+      "statType": "deffence",
+      "bodyPart": "body",
+      "rarity": "common"
+    },
+    {
+      "type": "hat",
+      "name": "Pointy Hat",
+      "stat": 5,
+      "statType": "deffence",
+      "bodyPart": "head",
+      "rarity": "common"
+    }
+  ],
+  "skillsData": [
+    { "name": "Fireball", "manaCost": 30, "stat": 50, "statType": "magic" },
+    { "name": "Ice Shard", "manaCost": 20, "stat": 35, "statType": "magic" }
+  ]
+}

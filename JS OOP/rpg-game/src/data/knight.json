@@ -1,0 +1,64 @@
+{
+  "characterData": {
+    "name": "Pesho",
+    "health": 200,
+    "mana": 100,
+    "basePhysicalAttack": 100,
+    "baseMagicPower": 50,
+    "baseDeffence": 100
+  },
+  "itemsData": [
+    {
+      "type": "sword",
+      "name": "Rusty Sword",
+      "stat": 10,
+      "statType": "physical",
+      "bodyPart": "rightHand",
+      "rarity": "common"
+    },
+    {
+      "type": "shield",
+      "name": "Wooden Shield",
+      "stat": 10,
+      "statType": "deffence",
+      "bodyPart": "leftHand",
+      "rarity": "common"
+    },
+    {
+      "type": "armour",
+      "name": "Cap",
+      "stat": 5,
+      "statType": "deffence",
+      "bodyPart": "head",
+      "rarity": "common"
+    },
+    {
+      "type": "armour",
+      "name": "Vest",
+      "stat": 10,
+      "statType": "deffence",
+      "bodyPart": "body",
+      "rarity": "common"
+    },
+    {
+      "type": "armour",
+      "name": "Mitts",
+      "stat": 2,
+      "statType": "deffence",
+      "bodyPart": "gloves",
+      "rarity": "common"
+    },
+    {
+      "type": "armour",
+      "name": "Leather Shoes",
+      "stat": 3,
+      "statType": "deffence",
+      "bodyPart": "boots",
+      "rarity": "common"
+    }
+  ],
+  "skillsData": [
+    { "name": "Sword Slash", "manaCost": 20, "stat": 30, "statType": "physical" },
+    { "name": "Shield Charge", "manaCost": 10, "stat": 10, "statType": "physical" }
+  ]
+}

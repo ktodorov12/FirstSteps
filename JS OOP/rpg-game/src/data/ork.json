@@ -1,0 +1,40 @@
+{
+  "characterData": {
+    "name": "Thrag",
+    "health": 220,
+    "mana": 30,
+    "basePhysicalAttack": 80,
+    "baseMagicPower": 0,
+    "baseDeffence": 30
+  },
+  "itemsData": [
+    {
+      "type": "axe",
+      "name": "Crude Axe",
+      "stat": 15,
+      "statType": "physical",
+      "bodyPart": "rightHand",
+      "rarity": "common"
+    },
+    {
+      "type": "helmet",
+      "name": "Spiked Helm",
+      "stat": 5,
+      "statType": "deffence",
+      "bodyPart": "head",
+      "rarity": "common"
+    },
+    {
+      "type": "boots",
+      "name": "Heavy Boots",
+      "stat": 3,
+      "statType": "deffence",
+      "bodyPart": "boots",
+      "rarity": "common"
+    }
+  ],
+  "skillsData": [
+    { "name": "Berserk Strike", "manaCost": 15, "stat": 40, "statType": "physical" },
+    { "name": "Roar", "manaCost": 5, "stat": 5, "statType": "deffence" }
+  ]
+}
