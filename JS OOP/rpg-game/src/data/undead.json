@@ -3,21 +3,21 @@
     "name": "Skeletal Minion",
     "health": 80,
     "mana": 20,
-    "basePhysicalAttack": 40,
-    "baseMagicPower": 0,
-    "baseDeffence": 10
+    "physicalDammage": 40,
+    "magicPower": 0,
+    "deffence": 10
   },
   "itemsData": [
     {
       "type": "club",
       "name": "Bone Club",
       "stat": 5,
-      "statType": "physical",
+      "statType": "physicalDammage",
       "bodyPart": "rightHand",
       "rarity": "common"
     }
   ],
   "skillsData": [
-    { "name": "Claw Swipe", "manaCost": 0, "stat": 15, "statType": "physical" }
+    { "name": "Claw Swipe", "manaCost": 0, "stat": 15, "statType": "physicalDammage" }
   ]
 }

@@ -3,16 +3,16 @@
     "name": "Pesho",
     "health": 200,
     "mana": 100,
-    "basePhysicalAttack": 100,
-    "baseMagicPower": 50,
-    "baseDeffence": 100
+    "physicalDammage": 100,
+    "magicPower": 50,
+    "deffence": 100
   },
   "itemsData": [
     {
       "type": "sword",
       "name": "Rusty Sword",
       "stat": 10,
-      "statType": "physical",
+      "statType": "physicalDammage",
       "bodyPart": "rightHand",
       "rarity": "common"
     },
@@ -58,7 +58,7 @@
     }
   ],
   "skillsData": [
-    { "name": "Sword Slash", "manaCost": 20, "stat": 30, "statType": "physical" },
-    { "name": "Shield Charge", "manaCost": 10, "stat": 10, "statType": "physical" }
+    { "name": "Sword Slash", "manaCost": 20, "stat": 30, "statType": "physicalDammage" },
+    { "name": "Shield Charge", "manaCost": 10, "stat": 10, "statType": "physicalDammage" }
   ]
 }

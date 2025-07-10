@@ -1,37 +1,80 @@
+/*
+===== STAT TYPES =====
+  - physicalDammage
+  - magicPower
+  - deffence
+  - health
+  - mana
+
+===== STATUS EFFECT =====
+  - null (no effect)
+  - with certain time (e.g. skills, potions, etc.)
+*/
+
 export default class Character {
   constructor(
     name,
     health,
     mana,
-    basePhysicalAttack,
-    baseMagicPower,
-    baseDeffence,
+    physicalDammage,
+    magicPower,
+    deffence,
     inventory,
     skills
   ) {
     this.name = name;
     this.health = health;
     this.mana = mana;
-    this.basePhysicalAttack = basePhysicalAttack;
-    this.baseMagicPower = baseMagicPower;
-    this.baseDeffence = baseDeffence;
+    this.physicalDammage = physicalDammage;
+    this.magicPower = magicPower;
+    this.deffence = deffence;
     this.inventory = inventory;
     this.skills = skills;
     this.equipedItems = {
-      leftHand: null,
-      rightHand: null,
-      head: null,
-      body: null,
-      gloves: null,
-      boots: null,
+      leftHand: { stat: 0 },
+      rightHand: { stat: 0 },
+      head: { stat: 0 },
+      body: { stat: 0 },
+      gloves: { stat: 0 },
+      boots: { stat: 0 },
     };
     this.isAlive = true;
+  }
+
+  pickUpItem(item) {
+    this.inventory.addItem(item);
+
+    return this;
+  }
+
+  removeItem(item) {
+    try {
+      this.inventory.dropItem(item);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      return this;
+    }
   }
 
   useItem(item) {
     try {
       this.inventory.decreaseItemQuantity(item);
-      // TODO: add logic for using items
+
+      this[item.statType] += item.stat;
+      console.log(`You used ${item.name}.`);
+      console.log(`Your ${item.statType} went up to ${this[item.statType]}`);
+
+      if (item.statusEffectLength) {
+        setTimeout(() => {
+          this[item.statType] -= item.stat;
+          console.log(
+            `${item.name}'s effect wore off. Your ${item.statType} is now ${
+              this[item.statType]
+            }`
+          );
+        }, item.statusEffectLength * 1000);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -40,53 +83,30 @@ export default class Character {
   }
 
   equipItem(item) {
-    let { bodyPart, statType } = item;
+    const { bodyPart } = item;
 
-    let currentItem = this.equipedItems[bodyPart] ?? { stat: 0 };
+    const currentItem = this.equipedItems[bodyPart];
 
-    if (statType == "physical") {
-      this.basePhysicalAttack -= currentItem.stat;
-      this.basePhysicalAttack += item.stat;
-    } else if (statType == "magical") {
-      this.baseMagicPower -= currentItem.stat;
-      this.baseMagicPower += item.stat;
-    } else if (statType == "deffence") {
-      this.baseDeffence -= currentItem.stat;
-      this.baseDeffence += item.stat;
-    } else {
-      throw new Error("This can't be equipped!");
-    }
+    this[item.statType] -= currentItem.stat;
+    this[item.statType] += item.stat;
 
     this.equipedItems[bodyPart] = item;
   }
 
   unequipItem(item) {
-    let { bodyPart, statType } = item;
+    const { bodyPart } = item;
 
-    let currentItem = this.equipedItems[bodyPart] ?? { stat: 0 };
+    const currentItem = this.equipedItems[bodyPart];
 
-    if (statType == "physical") {
-      this.basePhysicalAttack -= currentItem.stat;
-    } else if (statType == "magical") {
-      this.baseMagicPower -= currentItem.stat;
-    } else if (statType == "deffence") {
-      this.baseDeffence -= currentItem.stat;
-    } else {
-      throw new Error("This can't be equipped!");
-    }
+    this[item.statType] -= currentItem.stat;
 
-    this.equipedItems[bodyPart] = null;
-  }
-
-  removeItem(item) {
-    this.inventory.dropItem(item);
+    this.equipedItems[bodyPart] = { stat: 0 };
   }
 
   useWeapon(target) {
     console.log(`${this.name} attacks ${target.name}!`);
 
-    // TODO: add logic for eventual item use (like potion) that increases attack
-    target.takeDamage(this.basePhysicalAttack);
+    target.takeDamage(this.physicalDammage);
     return this;
   }
 
@@ -105,10 +125,10 @@ export default class Character {
     // TODO: change logic so skill that boosts attack/deffence can be used
     this.mana -= skill.manaCost;
     let statToIncrease;
-    if (skill.statType == "physical") {
-      statToIncrease = basePhysicalAttack;
+    if (skill.statType == "physicalDammage") {
+      statToIncrease = "physicalDammage";
     } else {
-      statToIncrease = baseMagicPower;
+      statToIncrease = "magicPower";
     }
 
     this[statToIncrease] += skill.stat;
@@ -118,10 +138,10 @@ export default class Character {
   }
 
   takeDamage(damage) {
-    const damageDone = damage - this.baseDeffence;
+    const damageDone = damage - this.deffence;
     if (damageDone <= 0) {
       console.log("This attack was unnefective!");
-      console.log(`Your power: ${damage}/ Foe's deffence ${this.baseDeffence}.`);
+      console.log(`Your power: ${damage}/ Foe's deffence ${this.deffence}.`);
       return;
     }
 

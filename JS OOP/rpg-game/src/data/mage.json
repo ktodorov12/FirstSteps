@@ -3,16 +3,16 @@
     "name": "Gandor",
     "health": 120,
     "mana": 250,
-    "basePhysicalAttack": 30,
-    "baseMagicPower": 120,
-    "baseDeffence": 40
+    "physicalDammage": 30,
+    "magicPower": 120,
+    "deffence": 40
   },
   "itemsData": [
     {
       "type": "staff",
       "name": "Oak Staff",
       "stat": 20,
-      "statType": "magic",
+      "statType": "magicPower",
       "bodyPart": "rightHand",
       "rarity": "common"
     },
@@ -34,7 +34,7 @@
     }
   ],
   "skillsData": [
-    { "name": "Fireball", "manaCost": 30, "stat": 50, "statType": "magic" },
-    { "name": "Ice Shard", "manaCost": 20, "stat": 35, "statType": "magic" }
+    { "name": "Fireball", "manaCost": 30, "stat": 50, "statType": "magicPower" },
+    { "name": "Ice Shard", "manaCost": 20, "stat": 35, "statType": "magicPower" }
   ]
 }

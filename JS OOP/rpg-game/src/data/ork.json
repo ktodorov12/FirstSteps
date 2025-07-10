@@ -3,16 +3,16 @@
     "name": "Thrag",
     "health": 220,
     "mana": 30,
-    "basePhysicalAttack": 80,
-    "baseMagicPower": 0,
-    "baseDeffence": 30
+    "physicalDammage": 80,
+    "magicPower": 0,
+    "deffence": 30
   },
   "itemsData": [
     {
       "type": "axe",
       "name": "Crude Axe",
       "stat": 15,
-      "statType": "physical",
+      "statType": "physicalDammage",
       "bodyPart": "rightHand",
       "rarity": "common"
     },
@@ -34,7 +34,7 @@
     }
   ],
   "skillsData": [
-    { "name": "Berserk Strike", "manaCost": 15, "stat": 40, "statType": "physical" },
+    { "name": "Berserk Strike", "manaCost": 15, "stat": 40, "statType": "physicalDammage" },
     { "name": "Roar", "manaCost": 5, "stat": 5, "statType": "deffence" }
   ]
 }

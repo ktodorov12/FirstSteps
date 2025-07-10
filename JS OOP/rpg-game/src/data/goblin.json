@@ -3,16 +3,16 @@
     "name": "Grub",
     "health": 90,
     "mana": 50,
-    "basePhysicalAttack": 35,
-    "baseMagicPower": 10,
-    "baseDeffence": 20
+    "physicalDammage": 35,
+    "magicPower": 10,
+    "deffence": 20
   },
   "itemsData": [
     {
       "type": "dagger",
       "name": "Rusty Dagger",
       "stat": 8,
-      "statType": "physical",
+      "statType": "physicalDammage",
       "bodyPart": "rightHand",
       "rarity": "common"
     },
@@ -26,7 +26,7 @@
     }
   ],
   "skillsData": [
-    { "name": "Sneaky Stab", "manaCost": 5, "stat": 20, "statType": "physical" },
+    { "name": "Sneaky Stab", "manaCost": 5, "stat": 20, "statType": "physicalDammage" },
     { "name": "Quick Escape", "manaCost": 10, "stat": 0, "statType": "deffence" }
   ]
 }

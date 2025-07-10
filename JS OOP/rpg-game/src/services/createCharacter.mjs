@@ -27,9 +27,9 @@ export default async function createCharacter(character) {
       characterData.name,
       characterData.health,
       characterData.mana,
-      characterData.basePhysicalAttack,
-      characterData.baseMagicPower,
-      characterData.baseDeffence,
+      characterData.physicalDammage,
+      characterData.magicPower,
+      characterData.deffence,
       inventory,
       skills
     );
