@@ -16,7 +16,22 @@ export default class Game {
     try {
       const pickedChar = await pickCharacterClass();
 
-      console.log(`You have chosen to be a ${pickedChar}.`);
+      console.log(`${chalk.bgCyan(`You have chosen to be a ${pickedChar}.`)} \n`);
+
+      const isChosen = await new Select({
+        name: "choose",
+        message: chalk.redBright(`Are you sure you want to be a ${pickedChar}?`),
+        choices: [
+          { name: "yes", message: "Yes.", value: true },
+          { name: "no", message: "No.", value: false },
+        ],
+      }).run();
+
+      if (isChosen == "no") {
+        await this.initialize();
+        return;
+      }
+
       const name = await new Input({
         message: "What's your character name?",
       }).run();
