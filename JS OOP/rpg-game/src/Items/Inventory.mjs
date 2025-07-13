@@ -1,3 +1,5 @@
+import chalk from "chalk";
+
 export default class Inventory {
   constructor() {
     this.items = {};
@@ -43,5 +45,25 @@ export default class Inventory {
 
     delete this.items[item.type][item.name];
     // TODO: add logic when there is more than one of said item (question to user).
+  }
+
+  showInventory() {
+    console.log(chalk.green.bold("\n🎒 === YOUR INVENTORY ==="));
+
+    if (Object.keys(this.items).length === 0) {
+      console.log(chalk.gray("Your bag is empty..."));
+    } else {
+      for (let type in this.items) {
+        for (let name in this.items[type]) {
+          const item = this.items[type][name];
+          console.log(
+            `🔹 ${chalk.cyan(item.name)} x${item.quantity} ` +
+              `(${chalk.yellow(item.statType)} +${item.stat})`
+          );
+        }
+      }
+    }
+
+    console.log(`${chalk.green("=".repeat(30))} \n`);
   }
 }

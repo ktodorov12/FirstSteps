@@ -10,6 +10,7 @@
   - null (no effect)
   - with certain time (e.g. skills, potions, etc.)
 */
+import chalk from "chalk";
 
 export default class Character {
   constructor(
@@ -85,8 +86,8 @@ export default class Character {
   equipItem(item) {
     const { bodyPart } = item;
 
-    if (this.equippedItems.hasOwnProperty(bodyPart) || this.hasOwnProperty(item.statType)) {
-      throw new Error("Ivalid!");
+    if (!this.hasOwnProperty(item.statType)) {
+      throw new Error("Ivalid stat type!");
     }
 
     const currentItem = this.equippedItems[bodyPart];
@@ -100,8 +101,8 @@ export default class Character {
   unequipItem(item) {
     const { bodyPart } = item;
 
-    if (this.equippedItems.hasOwnProperty(bodyPart) || this.hasOwnProperty(item.statType)) {
-      throw new Error("Ivalid!");
+    if (!this.hasOwnProperty(item.statType)) {
+      throw new Error("Ivalid stat type!");
     }
 
     const currentItem = this.equippedItems[bodyPart];
@@ -193,6 +194,16 @@ export default class Character {
     if (this.health <= 0) {
       this._die();
     }
+  }
+
+  showStatus() {
+    console.log(chalk.yellow.bold("\n❤️ === CURRENT STATUS ==="));
+    console.log(`🩸 Health: ${chalk.red(this.health)}`);
+    console.log(`🔵 Mana: ${chalk.blue(this.mana)}`);
+    console.log(`⚔️  Physical Damage: ${chalk.green(this.physicalDamage)}`);
+    console.log(`✨ Magic Power: ${chalk.magenta(this.magicPower)}`);
+    console.log(`🛡️  Defense: ${chalk.cyan(this.defense)}`);
+    console.log(`${chalk.yellow("=".repeat(30))} \n`);
   }
 
   _die() {

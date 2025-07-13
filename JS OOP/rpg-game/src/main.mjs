@@ -1,10 +1,8 @@
-import createCharacter from "./services/createCharacter.mjs";
+import Game from './Game/Game.mjs';
 
-const knight = await createCharacter("knight");
-const mage = await createCharacter("mage");
+async function main() {
+  const game = new Game();
+  await game.initialize();
+}
 
-const undead = await createCharacter("undead");
-const goblin = await createCharacter("goblin");
-const ork = await createCharacter("ork");
-
-console.log(ork);
+main();

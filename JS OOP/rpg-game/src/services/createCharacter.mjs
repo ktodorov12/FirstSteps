@@ -8,10 +8,11 @@ import Item from "../Items/Item.mjs";
 import Skill from "../Skills/Skill.mjs";
 import Skills from "../Skills/Skills.mjs";
 
-export default async function createCharacter(character) {
+export default async function createCharacter(character, name) {
   try {
-    const data = await readFile(`src/data/${character}.json`, "utf8");
+    const data = await readFile(`./data/${character}.json`, "utf8");
     const { characterData, itemsData, skillsData } = JSON.parse(data);
+    characterData.name = name;
 
     const characterBaseItems = itemsData.map(buildItem);
 
