@@ -1,12 +1,15 @@
+import GameMap from "./GameMap.mjs";
+
 import createCharacter from "../services/createCharacter.mjs";
 import pickCharacterClass from "../services/pickCharacterClass.mjs";
+
 import pkg from "enquirer";
 import chalk from "chalk";
 
 export default class Game {
   constructor() {
     this.player = null;
-    this.enemies = [];
+    this.map = [];
     this.currentTurn = 0;
   }
 
@@ -38,32 +41,44 @@ export default class Game {
 
       this.player = await createCharacter(pickedChar, name);
 
+      const mapSizeChosen = await new Select({
+        name: "map",
+        message: chalk.blackBright(`Choose a size for your map`),
+        choices: [
+          { name: 5, message: "Small.", value: 5 },
+          { name: 10, message: "Medium", value: 10 },
+          { name: 15, message: "Big", value: 15 },
+        ],
+      }).run();
+      this.map = new GameMap(mapSizeChosen, this.player).generateMap();
+
       console.log(`\nYou have created ${this.player.name} the ${pickedChar}!`);
       this.player.showStatus();
       this.player.inventory.showInventory();
       this.player.skills.showSkills();
 
+      this.map.printMap();
+
       console.log("Game initialized! Welcome to the RPG! \n");
+
+      while (this.player.isAlive) {
+        const action = await new Select({
+          name: "action",
+          message: "What do you want to do?",
+          choices: [
+            { name: "move", message: "Move to next area.", value: "move" },
+            { name: "inventory", message: "Open Inventory.", value: "inventory" },
+            { name: "skills", message: "See Skills.", value: "skills" },
+            { name: "status", message: "See Current Status.", value: "status" },
+            { name: "useItem", message: "Use Item.", value: "useItem" },
+            { name: "exit", message: "Exit game.", value: "exit" },
+          ],
+        }).run();
+
+        this.playerAction(action);
+      }
     } catch (error) {
       console.log(error);
-      this.initialize();
-    }
-
-    while (this.player.isAlive) {
-      const action = await new Select({
-        name: "action",
-        message: "What do you want to do?",
-        choices: [
-          { name: "move", message: "Move to next area.", value: "move" },
-          { name: "inventory", message: "Open Inventory.", value: "inventory" },
-          { name: "skills", message: "See Skills.", value: "skills" },
-          { name: "status", message: "See Current Status.", value: "status" },
-          { name: "useItem", message: "Use Item.", value: "useItem" },
-          { name: "exit", message: "Exit game.", value: "exit" },
-        ],
-      }).run();
-
-      this.playerAction(action);
     }
   }
 
