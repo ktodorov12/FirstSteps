@@ -1,0 +1,80 @@
+{
+  "characterData": {
+    "name": "Pesho the Unyielding",
+    "health": 400,
+    "mana": 150,
+    "physicalDamage": 140,
+    "magicPower": 80,
+    "defense": 160
+  },
+  "itemsData": [
+    {
+      "type": "sword",
+      "name": "Blade of Retribution",
+      "stat": 35,
+      "statType": "physicalDamage",
+      "bodyPart": "rightHand",
+      "rarity": "epic"
+    },
+    {
+      "type": "shield",
+      "name": "Bulwark of Eternity",
+      "stat": 30,
+      "statType": "defense",
+      "bodyPart": "leftHand",
+      "rarity": "rare"
+    },
+    {
+      "type": "armour",
+      "name": "Crown of Valor",
+      "stat": 25,
+      "statType": "defense",
+      "bodyPart": "head",
+      "rarity": "epic"
+    },
+    {
+      "type": "armour",
+      "name": "Chestplate of Dominion",
+      "stat": 40,
+      "statType": "defense",
+      "bodyPart": "body",
+      "rarity": "legendary"
+    },
+    {
+      "type": "armour",
+      "name": "Gauntlets of Stone",
+      "stat": 15,
+      "statType": "defense",
+      "bodyPart": "gloves",
+      "rarity": "rare"
+    },
+    {
+      "type": "armour",
+      "name": "Boots of the Titan",
+      "stat": 20,
+      "statType": "defense",
+      "bodyPart": "boots",
+      "rarity": "rare"
+    }
+  ],
+  "skillsData": [
+    {
+      "name": "Judgment Slash",
+      "manaCost": 30,
+      "stat": 60,
+      "statType": "physicalDamage"
+    },
+    {
+      "name": "Shield Breaker",
+      "manaCost": 25,
+      "stat": 50,
+      "statType": "physicalDamage"
+    },
+    {
+      "name": "Iron Will",
+      "manaCost": 20,
+      "stat": 30,
+      "statType": "defense"
+    }
+  ]
+}

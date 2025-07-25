@@ -50,7 +50,8 @@ export default class Game {
           { name: 15, message: "Big", value: 15 },
         ],
       }).run();
-      this.map = new GameMap(mapSizeChosen, this.player).generateMap();
+      const gameMap = new GameMap(mapSizeChosen, this.player)
+      this.map = await gameMap.generateMap();
 
       console.log(`\nYou have created ${this.player.name} the ${pickedChar}!`);
       this.player.showStatus();

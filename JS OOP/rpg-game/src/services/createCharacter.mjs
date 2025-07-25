@@ -12,7 +12,7 @@ export default async function createCharacter(character, name) {
   try {
     const data = await readFile(`./data/${character}.json`, "utf8");
     const { characterData, itemsData, skillsData } = JSON.parse(data);
-    characterData.name = name;
+    if (name) characterData.name = name;
 
     const characterBaseItems = itemsData.map(buildItem);
 

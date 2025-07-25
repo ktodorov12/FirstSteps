@@ -1,3 +1,6 @@
+import Character from "../Characters/Character.mjs";
+import createEnemies from "../services/createEnemies.mjs";
+
 export default class GameMap {
   constructor(size, player) {
     this._size = size;
@@ -5,7 +8,7 @@ export default class GameMap {
     this.map = [];
   }
 
-  generateMap() {
+  async generateMap() {
     const emptyMap = Array.from({ length: this._size }, () => {
       return Array.from({ length: this._size }, () => {
         // TODO: fix the idea for random wall generating
@@ -16,20 +19,17 @@ export default class GameMap {
     });
     this.map = emptyMap;
 
-    let space = this.map[randomNumber(this._size)][randomNumber(this._size)];
-    while (space.type !== "empty") {
-      space = this.map[randomNumber(this._size)][randomNumber(this._size)];
-    }
-    space.type = this._player;
+    // Place player
+    const playerSpace = getRandomEmptySpace(this.map, this._size);
+    playerSpace.type = this._player;
 
-    // ==========================================================
-    /* TODO: generate radom amount of enemies (based on the size)
-        and random type of enemies (based on those we have);
-    */
+    // Place enemies
+    const enemies = await createEnemies(this._size);
+    enemies.forEach((enemy) => {
+      const enemySpace = getRandomEmptySpace(this.map, this._size);
+      enemySpace.type = enemy;
+    });
 
-    /* TODO: place the created enemies randomly on the map;
-        (the place should be empty)
-    */
 
     // ==========================================================
     // TODO:generate random amount of chests (maybe class, based on the size)
@@ -46,9 +46,9 @@ export default class GameMap {
       let line = row
         .map((cell) => {
           if (cell.type === this._player) return "🙍‍♂️";
-          if (cell.type === "enemy" && !cell.defeated) return "👹";
-          if (cell.type === "boss" && !cell.defeated) return "👑";
-          if (cell.type === "wall") return " | "
+          if (cell.type instanceof Character) return "👹"; //&& !cell.defeated
+          // if (cell.type === "boss" ) return "👑"; // && !cell.defeated
+          if (cell.type === "wall") return " | ";
           return " . ";
         })
         .join(" ");
@@ -60,4 +60,14 @@ export default class GameMap {
 
 function randomNumber(border) {
   return Math.floor(Math.random() * border);
+}
+
+function getRandomEmptySpace(map, size) {
+  let x, y;
+  do {
+    x = randomNumber(size);
+    y = randomNumber(size);
+  } while (map[x][y].type !== "empty");
+
+  return map[x][y];
 }
