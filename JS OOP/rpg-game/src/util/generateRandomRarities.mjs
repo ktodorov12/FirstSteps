@@ -1,3 +1,5 @@
+import getRandomNumber from "./getRandomNumber.mjs";
+
 export default function generateRandomRarities(size) {
   const totalWeight = size * 75;
   const k = 2;
@@ -13,7 +15,7 @@ export default function generateRandomRarities(size) {
   const randomizedRarities = [];
 
   while (randomizedRarities.length < size + 2 && remainingWeight > 0) {
-    const selected = rarities[Math.floor(Math.random() * rarities.length)];
+    const selected = rarities[getRandomNumber(rarities.length)];
 
     randomizedRarities.push(selected.name);
     remainingWeight -= selected.weight;

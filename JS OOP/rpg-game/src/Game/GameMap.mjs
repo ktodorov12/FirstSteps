@@ -1,5 +1,6 @@
 import Character from "../Characters/Character.mjs";
 import createEnemies from "../services/createEnemies.mjs";
+import getRandomNumber from "../util/getRandomNumber.mjs";
 
 export default class GameMap {
   constructor(size, player) {
@@ -12,7 +13,7 @@ export default class GameMap {
     const emptyMap = Array.from({ length: this._size }, () => {
       return Array.from({ length: this._size }, () => {
         // TODO: fix the idea for random wall generating
-        return randomNumber(this._size) < (0.5 * this._size) / 100
+        return getRandomNumber(this._size) < (0.5 * this._size) / 100
           ? { type: "wall" }
           : { type: "empty" };
       });
@@ -58,15 +59,11 @@ export default class GameMap {
   }
 }
 
-function randomNumber(border) {
-  return Math.floor(Math.random() * border);
-}
-
 function getRandomEmptySpace(map, size) {
   let x, y;
   do {
-    x = randomNumber(size);
-    y = randomNumber(size);
+    x = getRandomNumber(size);
+    y = getRandomNumber(size);
   } while (map[x][y].type !== "empty");
 
   return map[x][y];
