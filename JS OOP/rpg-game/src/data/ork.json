@@ -17,7 +17,7 @@
       "rarity": "common"
     },
     {
-      "type": "helmet",
+      "type": "armour",
       "name": "Spiked Helm",
       "stat": 5,
       "statType": "defense",
@@ -25,7 +25,7 @@
       "rarity": "common"
     },
     {
-      "type": "boots",
+      "type": "armour",
       "name": "Heavy Boots",
       "stat": 3,
       "statType": "defense",

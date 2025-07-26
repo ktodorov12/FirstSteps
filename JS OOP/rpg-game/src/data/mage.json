@@ -17,7 +17,7 @@
       "rarity": "common"
     },
     {
-      "type": "robe",
+      "type": "armour",
       "name": "Apprentice Robe",
       "stat": 15,
       "statType": "defense",
@@ -25,7 +25,7 @@
       "rarity": "common"
     },
     {
-      "type": "hat",
+      "type": "armour",
       "name": "Pointy Hat",
       "stat": 5,
       "statType": "defense",
