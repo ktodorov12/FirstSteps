@@ -10,6 +10,7 @@ export default class Game {
   constructor() {
     this.player = null;
     this.map = [];
+    this.boss = "";
     this.currentTurn = 0;
   }
 
@@ -45,13 +46,14 @@ export default class Game {
         name: "map",
         message: chalk.blackBright(`Choose a size for your map`),
         choices: [
-          { name: 5, message: "Small.", value: 5 },
+          { name: 5, message: "Small", value: 5 },
           { name: 10, message: "Medium", value: 10 },
           { name: 15, message: "Big", value: 15 },
         ],
       }).run();
-      const gameMap = new GameMap(mapSizeChosen, this.player)
+      const gameMap = new GameMap(mapSizeChosen, this.player);
       this.map = await gameMap.generateMap();
+      this.boss = gameMap.boss;
 
       console.log(`\nYou have created ${this.player.name} the ${pickedChar}!`);
       this.player.showStatus();

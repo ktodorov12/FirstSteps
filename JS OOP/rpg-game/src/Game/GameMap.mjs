@@ -1,11 +1,13 @@
-import Character from "../Characters/Character.mjs";
 import createEnemies from "../services/createEnemies.mjs";
+import createChests from "../services/createChests.mjs";
+
 import getRandomNumber from "../util/getRandomNumber.mjs";
 
 export default class GameMap {
   constructor(size, player) {
     this._size = size;
     this._player = player;
+    this.boss = "";
     this.map = [];
   }
 
@@ -28,15 +30,19 @@ export default class GameMap {
     const enemies = await createEnemies(this._size);
     enemies.forEach((enemy) => {
       const enemySpace = getRandomEmptySpace(this.map, this._size);
-      enemySpace.type = enemy;
+      enemySpace.type = "enemy";
+      enemySpace.payload = enemy;
+      if (enemy.hasOwnProperty("isBoss")) this.boss = enemy;
     });
 
-
-    // ==========================================================
-    // TODO:generate random amount of chests (maybe class, based on the size)
-    // that hold a random item;
-
-    // TODO: place the chest randomly on the map (the place should be empty);
+    // Place chests (items)
+    const chests = createChests(this._size);
+    chests.forEach((chest) => {
+      const chestSpace = getRandomEmptySpace(this.map, this._size);
+      chest.opened = false;
+      chestSpace.type = "chest";
+      chestSpace.payload = chest;
+    });
 
     return this;
   }
@@ -46,9 +52,10 @@ export default class GameMap {
     for (let row of this.map) {
       let line = row
         .map((cell) => {
-          if (cell.type === this._player) return "🙍‍♂️";
-          if (cell.type instanceof Character) return "👹"; //&& !cell.defeated
-          // if (cell.type === "boss" ) return "👑"; // && !cell.defeated
+          if (cell.type === this._player) return "🗿";
+          if (cell.payload === this.boss && cell.isAlive == false) return "👑";
+          if (cell.type === "enemy" && cell.isAlive == false) return "👹";
+          if (cell.type === "chest" && cell.opened == true) return "💰";
           if (cell.type === "wall") return " | ";
           return " . ";
         })

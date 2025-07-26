@@ -23,6 +23,7 @@ export default async function createEnemies(mapSize) {
   }
 
   const boss = await createCharacter("boss", generateEnemyName("boss"));
+  boss.isBoss = true;
   enemies.push(boss);
 
   return enemies;
