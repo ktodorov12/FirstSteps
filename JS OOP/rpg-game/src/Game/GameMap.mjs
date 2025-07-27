@@ -1,17 +1,14 @@
-import createEnemies from "../services/createEnemies.mjs";
-import createChests from "../services/createChests.mjs";
-
 import getRandomNumber from "../util/getRandomNumber.mjs";
 
 export default class GameMap {
   constructor(size, player) {
     this._size = size;
     this._player = player;
-    this.boss = "";
+    this.playerPosition = [0, 0];
     this.map = [];
   }
 
-  async generateMap() {
+  async generateMap(enemies, chests) {
     const emptyMap = Array.from({ length: this._size }, () => {
       return Array.from({ length: this._size }, () => {
         // TODO: fix the idea for random wall generating
@@ -23,25 +20,23 @@ export default class GameMap {
     this.map = emptyMap;
 
     // Place player
-    const playerSpace = getRandomEmptySpace(this.map, this._size);
-    playerSpace.type = this._player;
+    const { space, position } = getRandomEmptySpace(this.map, this._size);
+    this.playerPosition = position;
+    space.type = this._player;
 
     // Place enemies
-    const enemies = await createEnemies(this._size);
     enemies.forEach((enemy) => {
-      const enemySpace = getRandomEmptySpace(this.map, this._size);
-      enemySpace.type = "enemy";
-      enemySpace.payload = enemy;
-      if (enemy.hasOwnProperty("isBoss")) this.boss = enemy;
+      const { space } = getRandomEmptySpace(this.map, this._size);
+      space.type = "enemy";
+      space.payload = enemy;
     });
 
     // Place chests (items)
-    const chests = createChests(this._size);
     chests.forEach((chest) => {
-      const chestSpace = getRandomEmptySpace(this.map, this._size);
+      const { space } = getRandomEmptySpace(this.map, this._size);
       chest.opened = false;
-      chestSpace.type = "chest";
-      chestSpace.payload = chest;
+      space.type = "chest";
+      space.payload = chest;
     });
 
     return this;
@@ -73,5 +68,8 @@ function getRandomEmptySpace(map, size) {
     y = getRandomNumber(size);
   } while (map[x][y].type !== "empty");
 
-  return map[x][y];
+  return {
+    position: [x, y],
+    space: map[x][y],
+  };
 }

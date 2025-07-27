@@ -2,21 +2,22 @@ import GameMap from "./GameMap.mjs";
 
 import createCharacter from "../services/createCharacter.mjs";
 import pickCharacterClass from "../services/pickCharacterClass.mjs";
+import createEnemies from "../services/createEnemies.mjs";
+import createChests from "../services/createChests.mjs";
 
 import pkg from "enquirer";
+const { Input, Select } = pkg;
 import chalk from "chalk";
 
 export default class Game {
   constructor() {
     this.player = null;
-    this.map = [];
-    this.boss = "";
+    this.boss = null;
+    this.gameMap = [];
     this.currentTurn = 0;
   }
 
   async initialize() {
-    const { Input, Select } = pkg;
-
     try {
       const pickedChar = await pickCharacterClass();
 
@@ -51,18 +52,24 @@ export default class Game {
           { name: 15, message: "Big", value: 15 },
         ],
       }).run();
-      const gameMap = new GameMap(mapSizeChosen, this.player);
-      this.map = await gameMap.generateMap();
-      this.boss = gameMap.boss;
+
+      const enemies = await createEnemies(mapSizeChosen);
+      this.boss = enemies.find((e) => e.hasOwnProperty("isBoss"));
+
+      const chests = createChests(mapSizeChosen);
+
+      this.gameMap = new GameMap(mapSizeChosen, this.player);
+      await this.gameMap.generateMap(enemies, chests);
 
       console.log(`\nYou have created ${this.player.name} the ${pickedChar}!`);
       this.player.showStatus();
       this.player.inventory.showInventory();
       this.player.skills.showSkills();
 
-      this.map.printMap();
+      this.gameMap.printMap();
 
       console.log("Game initialized! Welcome to the RPG! \n");
+      console.log(`Defeat ${this.boss.name} to win the game!`);
 
       while (this.player.isAlive) {
         const action = await new Select({
@@ -78,7 +85,7 @@ export default class Game {
           ],
         }).run();
 
-        this.playerAction(action);
+        await this.playerAction(action);
       }
     } catch (error) {
       console.log(error);
