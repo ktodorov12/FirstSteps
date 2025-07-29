@@ -111,7 +111,17 @@ export default class Game {
         break;
 
       case "move":
-        await this.handleMove();
+        const direction = await new Select({
+          name: "direction",
+          message: "Where would you like to go?",
+          choices: [
+            { name: "forward", message: "Forward", value: "forward" },
+            { name: "right", message: "Right", value: "right" },
+            { name: "left", message: "Left", value: "left" },
+            { name: "backwards", message: "Backwards", value: "backwards" },
+          ],
+        }).run();
+        this._handleMove(direction);
         break;
 
       case "exit":
@@ -123,21 +133,58 @@ export default class Game {
     }
   }
 
-  async handleMove() {
-    // simple random encounter
-    const encounter = Math.random();
-    if (encounter < 0.3) {
-      console.log("You found a chest!");
-      // maybe auto add loot or ask if they want to open
-    } else if (encounter < 0.6) {
-      console.log("An enemy appears!");
-      // here start combat
-    } else {
-      console.log("Nothing happens. You keep walking...");
+  enemyAction() {}
+
+  _handleMove(direction) {
+    const [x, y] = this.gameMap.playerPosition;
+
+    switch (direction) {
+      case "forward":
+        this._moveTo([x - 1, y]);
+        break;
+
+      case "backwards":
+        this._moveTo([x + 1, y]);
+        break;
+
+      case "right":
+        this._moveTo([x, y + 1]);
+        break;
+
+      case "left":
+        this._moveTo([x, y - 1]);
+        break;
+
+      default:
+        throw new Error(`${direction}: no such direction`);
     }
   }
 
-  enemyAction() {}
+  _moveTo(newCoordinates) {
+    const { map } = this.gameMap;
+    const [oldX, oldY] = this.gameMap.playerPosition;
+    const [newX, newY] = newCoordinates;
+
+    if (!(newX in map) || !(newY in map[newX])) {
+      console.log(`\n ${chalk.red("Out of bounds! Move in other direction.")}`);
+      this.gameMap.printMap();
+      return;
+    }
+
+    const destination = map[newX][newY].type;
+
+    if (destination === "wall") {
+      console.log(`\n ${chalk.red("You hitted a wall! Move in other direction.")}`);
+      this.gameMap.printMap();
+      return;
+    }
+
+    map[oldX][oldY] = { type: "empty" };
+    this.gameMap.playerPosition = [newX, newY];
+    map[newX][newY] = { type: this.player };
+
+    this.gameMap.printMap();
+  }
 }
 
 /* 
