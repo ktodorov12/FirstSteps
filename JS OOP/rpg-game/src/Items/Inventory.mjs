@@ -1,4 +1,6 @@
 import chalk from "chalk";
+import pkg from "enquirer";
+const { Select } = pkg;
 
 export default class Inventory {
   constructor() {
@@ -65,5 +67,34 @@ export default class Inventory {
     }
 
     console.log(`${chalk.green("=".repeat(30))} \n`);
+  }
+
+  async openInventory() {
+    const items = [];
+
+    if (Object.keys(this.items).length === 0) {
+      console.log(chalk.gray("Your bag is empty..."));
+    } else {
+      for (let type in this.items) {
+        for (let name in this.items[type]) {
+          const item = this.items[type][name];
+          items.push({
+            name: item,
+            message:
+              `🔹 ${chalk.cyan(item.name)} x${item.quantity} ` +
+              `(${chalk.yellow(item.statType)} +${item.stat})`,
+            value: item,
+          });
+        }
+      }
+    }
+
+    const itemPicked = await new Select({
+      name: "action",
+      message: chalk.green.bold("\n🎒 === YOUR INVENTORY ==="),
+      choices: items,
+    }).run();
+
+    return itemPicked;
   }
 }

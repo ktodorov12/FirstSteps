@@ -95,7 +95,36 @@ export default class Game {
   async playerAction(action) {
     switch (action) {
       case "inventory":
-        this.player.inventory.showInventory();
+        const pickedItem = await this.player.inventory.openInventory();
+
+        const itemUsage = await new Select({
+          name: "item usage",
+          message: "What would you like to do with the item?",
+          choices: [
+            {
+              message: "Use it.",
+              value: () => this.player.useItem(pickedItem),
+            },
+            {
+              message: "Drop it.",
+              value: () => this.player.removeItem(pickedItem),
+            },
+            {
+              message: "Equip it.",
+              value: () => this.player.equipItem(pickedItem),
+            },
+            {
+              message: "Unequip it.",
+              value: () => this.player.unequipItem(pickedItem),
+            },
+          ],
+        }).run();
+
+        try {
+          await itemUsage();
+        } catch (err) {
+          console.error("Something went wrong:", err);
+        }
         break;
 
       case "skills":
