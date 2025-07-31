@@ -123,7 +123,7 @@ export default class Game {
         },
         {
           message: "Drop it.",
-          value: () => this.player.removeItem(pickedItem),
+          value: async () => await this.player.removeItem(pickedItem),
         },
         {
           message: "Equip it.",

@@ -48,9 +48,13 @@ export default class Character {
     return this;
   }
 
-  removeItem(item) {
+  async removeItem(item) {
     try {
-      this.inventory.dropItem(item);
+      const wasDeleted = await this.inventory.dropItem(item);
+
+      if (wasDeleted && this.equippedItems[item.bodyPart] === item) {
+        this.unequipItem(item);
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -64,7 +68,6 @@ export default class Character {
 
       this[item.statType] += item.stat;
 
-      
       console.log(`You used ${item.name}.`);
       console.log(`Your ${item.statType} went up to ${this[item.statType]}`);
 
@@ -98,6 +101,8 @@ export default class Character {
     this[item.statType] += item.stat;
 
     this.equippedItems[bodyPart] = item;
+
+    this.showStatus();
   }
 
   unequipItem(item) {
@@ -112,6 +117,8 @@ export default class Character {
     this[item.statType] -= currentItem.stat;
 
     this.equippedItems[bodyPart] = { stat: 0 };
+
+    this.showStatus();
   }
 
   useWeapon(target) {
@@ -205,6 +212,18 @@ export default class Character {
     console.log(`⚔️  Physical Damage: ${chalk.green(this.physicalDamage)}`);
     console.log(`✨ Magic Power: ${chalk.magenta(this.magicPower)}`);
     console.log(`🛡️  Defense: ${chalk.cyan(this.defense)}`);
+
+    console.log(chalk.yellow.bold("\n🧰 === EQUIPPED ITEMS ==="));
+    Object.entries(this.equippedItems).forEach(([slot, item]) => {
+      if (item && item.name) {
+        console.log(
+          `${slot}: ${chalk.green(item.name)} (+${item.stat} ${item.statType})`
+        );
+      } else {
+        console.log(`${slot}: ${chalk.gray("None")}`);
+      }
+    });
+
     console.log(`${chalk.yellow("=".repeat(30))} \n`);
   }
 

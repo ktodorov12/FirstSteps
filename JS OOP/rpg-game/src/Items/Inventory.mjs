@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import pkg from "enquirer";
-const { Select } = pkg;
+const { Select, Input } = pkg;
 
 export default class Inventory {
   constructor() {
@@ -22,12 +22,12 @@ export default class Inventory {
     return this;
   }
 
-  decreaseItemQuantity(item) {
+  decreaseItemQuantity(item, decreaseQty = 1) {
     if (!this.items[item.type][item.name]) {
       throw new Error(`${item.name} can't be found in the inventory!`);
     }
 
-    this.items[item.type][item.name].quantity -= 1;
+    this.items[item.type][item.name].quantity -= decreaseQty;
     let qty = this.items[item.type][item.name].quantity;
 
     if (qty == 0) {
@@ -40,13 +40,62 @@ export default class Inventory {
     return this;
   }
 
-  dropItem(item) {
+  async dropItem(item) {
     if (!this.items[item.type][item.name]) {
       throw new Error(`${item.name} can't be found in the inventory!`);
     }
 
-    delete this.items[item.type][item.name];
-    // TODO: add logic when there is more than one of said item (question to user).
+    const deleteChoice = await new Select({
+      name: "Delete choice",
+      message: chalk.red.bold(`\nDo you want to drop ${item.name} x | ${item.quantity} |?`),
+      choices: [
+        {
+          message: "Yes.",
+          value: () => {
+            delete this.items[item.type][item.name];
+            console.log(`You have no more ${item.name}'s in your inventory!`);
+            return true;
+          },
+        },
+        {
+          message: "No, I want to reduce the number.",
+          value: async () => {
+            const dropAmount = Number(await new Input({
+              message: `You have | ${item.quantity} | ${item.name} in your inventory. How many would you like to drop?`,
+            }).run());
+
+            if (dropAmount > item.quantity) {
+              throw new Error("You cannot remove more than you have!");
+            }
+
+            if (dropAmount === item.quantity) {
+              console.log(
+                "\nYou could have just press yes, but anyway the item is droped :)"
+              );
+              delete this.items[item.type][item.name];
+              console.log(`You have no more ${item.name}'s in your inventory!`);
+              return true;
+            }
+
+            this.decreaseItemQuantity(item, dropAmount);
+            return false;
+          },
+        },
+        {
+          message: "No.",
+          value: () => {
+            console.log(`You have | ${item.quantity} | ${item.name} in your inventory.`);
+            return false;
+          },
+        },
+      ],
+    }).run();
+
+    try {
+      return await deleteChoice();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   showInventory() {
