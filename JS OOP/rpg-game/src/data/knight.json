@@ -55,6 +55,13 @@
       "statType": "defense",
       "bodyPart": "boots",
       "rarity": "common"
+    },
+    {
+      "type": "healthPotion",
+      "name": "Small health potion",
+      "stat": 10,
+      "statType": "health",
+      "rarity": "common"
     }
   ],
   "skillsData": [

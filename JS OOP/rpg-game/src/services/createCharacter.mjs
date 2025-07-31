@@ -35,7 +35,11 @@ export default async function createCharacter(character, name) {
       skills
     );
 
-    characterBaseItems.forEach((item) => newCharacter.equipItem(item));
+    characterBaseItems.forEach((item) => {
+      if (item.bodyPart) {
+        newCharacter.equipItem(item);
+      }
+    });
 
     return newCharacter;
   } catch (err) {
@@ -44,10 +48,16 @@ export default async function createCharacter(character, name) {
 }
 
 function buildItem(item) {
-  return new Item(item.type, item.name, item.stat, item.statType, item.bodyPart, item.rarity);
+  return new Item(
+    item.type,
+    item.name,
+    item.stat,
+    item.statType,
+    item.bodyPart,
+    item.rarity
+  );
 }
 
 function buildSkill(skill) {
   return new Skill(skill.name, skill.manaCost, skill.stat, skill.statType);
 }
-
