@@ -63,6 +63,8 @@ export default class Character {
       this.inventory.decreaseItemQuantity(item);
 
       this[item.statType] += item.stat;
+
+      
       console.log(`You used ${item.name}.`);
       console.log(`Your ${item.statType} went up to ${this[item.statType]}`);
 

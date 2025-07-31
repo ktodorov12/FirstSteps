@@ -76,120 +76,109 @@ export default class Game {
           name: "action",
           message: "What do you want to do?",
           choices: [
-            { name: "move", message: "Move to next area.", value: "move" },
-            { name: "inventory", message: "Open Inventory.", value: "inventory" },
-            { name: "skills", message: "See Skills.", value: "skills" },
-            { name: "status", message: "See Current Status.", value: "status" },
-            { name: "useItem", message: "Use Item.", value: "useItem" },
-            { name: "exit", message: "Exit game.", value: "exit" },
+            {
+              message: "Move to next area.",
+              value: async () => await this._handleMove(),
+            },
+            { message: "Open Inventory.", value: () => this._handleInventory() },
+            {
+              message: "See Skills.",
+              value: () => this.player.skills.showSkills(),
+            },
+            {
+              message: "See Current Status.",
+              value: () => this.player.showStatus(),
+            },
+            {
+              message: "Exit game.",
+              value: () => {
+                console.log(`\n ${chalk.red("👋 Goodbye, adventurer!")} \n`);
+                process.exit(0);
+              },
+            },
           ],
         }).run();
 
-        await this.playerAction(action);
+        await action();
       }
     } catch (error) {
       console.log(error);
     }
   }
 
-  async playerAction(action) {
-    switch (action) {
-      case "inventory":
-        const pickedItem = await this.player.inventory.openInventory();
+  fight(enemy) {
+    console.log(enemy);
+  }
 
-        const itemUsage = await new Select({
-          name: "item usage",
-          message: "What would you like to do with the item?",
-          choices: [
-            {
-              message: "Use it.",
-              value: () => this.player.useItem(pickedItem),
-            },
-            {
-              message: "Drop it.",
-              value: () => this.player.removeItem(pickedItem),
-            },
-            {
-              message: "Equip it.",
-              value: () => this.player.equipItem(pickedItem),
-            },
-            {
-              message: "Unequip it.",
-              value: () => this.player.unequipItem(pickedItem),
-            },
-          ],
-        }).run();
+  async _handleInventory() {
+    const pickedItem = await this.player.inventory.openInventory();
 
-        try {
-          await itemUsage();
-        } catch (err) {
-          console.error("Something went wrong:", err);
-        }
-        break;
+    const itemUsage = await new Select({
+      name: "item usage",
+      message: "What would you like to do with the item?",
+      choices: [
+        {
+          message: "Use it.",
+          value: () => this.player.useItem(pickedItem),
+        },
+        {
+          message: "Drop it.",
+          value: () => this.player.removeItem(pickedItem),
+        },
+        {
+          message: "Equip it.",
+          value: () => this.player.equipItem(pickedItem),
+        },
+        {
+          message: "Unequip it.",
+          value: () => this.player.unequipItem(pickedItem),
+        },
+      ],
+    }).run();
 
-      case "skills":
-        this.player.skills.showSkills();
-        break;
-
-      case "status":
-        this.player.showStatus();
-        break;
-
-      case "useItem":
-        console.log("Feature to use an item...");
-        break;
-
-      case "move":
-        const direction = await new Select({
-          name: "direction",
-          message: "Where would you like to go?",
-          choices: [
-            { name: "forward", message: "Forward", value: "forward" },
-            { name: "right", message: "Right", value: "right" },
-            { name: "left", message: "Left", value: "left" },
-            { name: "backwards", message: "Backwards", value: "backwards" },
-          ],
-        }).run();
-        this._handleMove(direction);
-        break;
-
-      case "exit":
-        console.log(`\n ${chalk.red("👋 Goodbye, adventurer!")} \n`);
-        process.exit(0);
-
-      default:
-        console.log(`\n ${chalk.gray("I don't understand that action.")} \n`);
+    try {
+      await itemUsage();
+    } catch (err) {
+      console.error("Something went wrong:", err);
     }
   }
 
-  enemyAction() {}
+  _enemyAction(enemy) {
+    if (enemy.health <= enemy.health >> 1) {
+    }
 
-  _handleMove(direction) {
+    enemy.useWeapon(this.player);
+  }
+
+  async _handleMove() {
     const [x, y] = this.gameMap.playerPosition;
+    const direction = await new Select({
+      name: "direction",
+      message: "Where would you like to go?",
+      choices: [
+        {
+          message: "Forward",
+          value: async () => await this._moveTo([x - 1, y]),
+        },
+        {
+          message: "Backwards",
+          value: async () => await this._moveTo([x + 1, y]),
+        },
+        {
+          message: "Right",
+          value: async () => await this._moveTo([x, y + 1]),
+        },
+        {
+          message: "Left",
+          value: async () => await this._moveTo([x, y - 1]),
+        },
+      ],
+    }).run();
 
-    switch (direction) {
-      case "forward":
-        this._moveTo([x - 1, y]);
-        break;
-
-      case "backwards":
-        this._moveTo([x + 1, y]);
-        break;
-
-      case "right":
-        this._moveTo([x, y + 1]);
-        break;
-
-      case "left":
-        this._moveTo([x, y - 1]);
-        break;
-
-      default:
-        throw new Error(`${direction}: no such direction`);
-    }
+    await direction();
   }
 
-  _moveTo(newCoordinates) {
+  async _moveTo(newCoordinates) {
     const { map } = this.gameMap;
     const [oldX, oldY] = this.gameMap.playerPosition;
     const [newX, newY] = newCoordinates;
