@@ -47,7 +47,9 @@ export default class Inventory {
 
     const deleteChoice = await new Select({
       name: "Delete choice",
-      message: chalk.red.bold(`\nDo you want to drop ${item.name} x | ${item.quantity} |?`),
+      message: chalk.red.bold(
+        `\nDo you want to drop ${item.name} x | ${item.quantity} |?`
+      ),
       choices: [
         {
           message: "Yes.",
@@ -60,9 +62,11 @@ export default class Inventory {
         {
           message: "No, I want to reduce the number.",
           value: async () => {
-            const dropAmount = Number(await new Input({
-              message: `You have | ${item.quantity} | ${item.name} in your inventory. How many would you like to drop?`,
-            }).run());
+            const dropAmount = Number(
+              await new Input({
+                message: `You have | ${item.quantity} | ${item.name} in your inventory. How many would you like to drop?`,
+              }).run()
+            );
 
             if (dropAmount > item.quantity) {
               throw new Error("You cannot remove more than you have!");
@@ -128,7 +132,6 @@ export default class Inventory {
         for (let name in this.items[type]) {
           const item = this.items[type][name];
           items.push({
-            name: item,
             message:
               `🔹 ${chalk.cyan(item.name)} x${item.quantity} ` +
               `(${chalk.yellow(item.statType)} +${item.stat})`,
@@ -136,6 +139,11 @@ export default class Inventory {
           });
         }
       }
+
+      items.push({
+        message: `🔹 ${chalk.cyan.bold("Back.")}`,
+        value: "undefined",
+      });
     }
 
     const itemPicked = await new Select({

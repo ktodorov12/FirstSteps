@@ -112,21 +112,31 @@ export default class Game {
 
   async _handleInventory() {
     const pickedItem = await this.player.inventory.openInventory();
+    console.log(pickedItem);
+    
+    if (pickedItem === "back") {
+      return;
+    }
 
-    let choices;
+    const choices = [
+      {
+        message: "Drop it.",
+        value: async () => await this.player.removeItem(pickedItem),
+      },
+      {
+        message: "Back.",
+        value: () => {
+          return this._handleInventory();
+        },
+      },
+    ];
     if (pickedItem.bodyPart === null) {
-      choices = [
-        {
-          message: "Use it.",
-          value: () => this.player.useItem(pickedItem),
-        },
-        {
-          message: "Drop it.",
-          value: async () => await this.player.removeItem(pickedItem),
-        },
-      ];
+      choices.unshift({
+        message: "Use it.",
+        value: () => this.player.useItem(pickedItem),
+      });
     } else {
-      choices = [
+      choices.unshift(
         this.player.equippedItems[pickedItem.bodyPart] === pickedItem
           ? {
               message: "Unequip it.",
@@ -141,12 +151,8 @@ export default class Game {
                 this.player.equipItem(pickedItem);
                 this.player.showStatus();
               },
-            },
-        {
-          message: "Drop it.",
-          value: async () => await this.player.removeItem(pickedItem),
-        },
-      ];
+            }
+      );
     }
 
     const itemUsage = await new Select({
