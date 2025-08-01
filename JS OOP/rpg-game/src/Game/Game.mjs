@@ -113,10 +113,9 @@ export default class Game {
   async _handleInventory() {
     const pickedItem = await this.player.inventory.openInventory();
 
-    const itemUsage = await new Select({
-      name: "item usage",
-      message: "What would you like to do with the item?",
-      choices: [
+    let choices;
+    if (pickedItem.bodyPart === null) {
+      choices = [
         {
           message: "Use it.",
           value: () => this.player.useItem(pickedItem),
@@ -125,15 +124,35 @@ export default class Game {
           message: "Drop it.",
           value: async () => await this.player.removeItem(pickedItem),
         },
+      ];
+    } else {
+      choices = [
+        this.player.equippedItems[pickedItem.bodyPart] === pickedItem
+          ? {
+              message: "Unequip it.",
+              value: () => {
+                this.player.unequipItem(pickedItem);
+                this.player.showStatus();
+              },
+            }
+          : {
+              message: "Equip it.",
+              value: () => {
+                this.player.equipItem(pickedItem);
+                this.player.showStatus();
+              },
+            },
         {
-          message: "Equip it.",
-          value: () => this.player.equipItem(pickedItem),
+          message: "Drop it.",
+          value: async () => await this.player.removeItem(pickedItem),
         },
-        {
-          message: "Unequip it.",
-          value: () => this.player.unequipItem(pickedItem),
-        },
-      ],
+      ];
+    }
+
+    const itemUsage = await new Select({
+      name: "item usage",
+      message: "What would you like to do with the item?",
+      choices,
     }).run();
 
     try {

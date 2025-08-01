@@ -54,7 +54,10 @@ export default class Character {
 
       if (wasDeleted && this.equippedItems[item.bodyPart] === item) {
         this.unequipItem(item);
+        this.showStatus();
       }
+
+      this.inventory.showInventory();
     } catch (error) {
       console.log(error);
     } finally {
@@ -64,6 +67,10 @@ export default class Character {
 
   useItem(item) {
     try {
+      if (item.bodyPart !== null) {
+        throw new Error("You can't use equipable items!");
+      }
+
       this.inventory.decreaseItemQuantity(item);
 
       this[item.statType] += item.stat;
@@ -91,8 +98,8 @@ export default class Character {
   equipItem(item) {
     const { bodyPart } = item;
 
-    if (!this.hasOwnProperty(item.statType)) {
-      throw new Error("Ivalid stat type!");
+    if (item.bodyPart === null) {
+      throw new Error("You can't equip usable items!");
     }
 
     const currentItem = this.equippedItems[bodyPart];
@@ -101,15 +108,13 @@ export default class Character {
     this[item.statType] += item.stat;
 
     this.equippedItems[bodyPart] = item;
-
-    this.showStatus();
   }
 
   unequipItem(item) {
     const { bodyPart } = item;
 
-    if (!this.hasOwnProperty(item.statType)) {
-      throw new Error("Ivalid stat type!");
+    if (item.bodyPart === null) {
+      throw new Error("You can't equip usable items!");
     }
 
     const currentItem = this.equippedItems[bodyPart];
@@ -117,8 +122,6 @@ export default class Character {
     this[item.statType] -= currentItem.stat;
 
     this.equippedItems[bodyPart] = { stat: 0 };
-
-    this.showStatus();
   }
 
   useWeapon(target) {
