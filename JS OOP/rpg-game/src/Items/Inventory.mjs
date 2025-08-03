@@ -142,7 +142,7 @@ export default class Inventory {
 
       items.push({
         message: `🔹 ${chalk.cyan.bold("Back.")}`,
-        value: "undefined",
+        value: "back",
       });
     }
 

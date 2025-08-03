@@ -24,6 +24,8 @@ export default class Character {
     skills
   ) {
     this.name = name;
+    this._baseHealth = health;
+    this._baseMana = mana;
     this.health = health;
     this.mana = mana;
     this.physicalDamage = physicalDamage;
@@ -73,7 +75,13 @@ export default class Character {
 
       this.inventory.decreaseItemQuantity(item);
 
-      this[item.statType] += item.stat;
+      if (item.type.endsWith("Potion")) {
+        const base = `_base${item.statType[0].toUpperCase() + item.statType.slice(1)}`;
+
+        this[item.statType] = Math.min(this[base], this[item.statType] + item.stat);
+      } else {
+        this[item.statType] += item.stat;
+      }
 
       console.log(`You used ${item.name}.`);
       console.log(`Your ${item.statType} went up to ${this[item.statType]}`);
