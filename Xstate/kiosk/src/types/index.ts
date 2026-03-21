@@ -7,6 +7,24 @@ export interface Product {
   category: "coffee" | "pastry" | "merch" | "rewards";
 }
 
+export const Category = {
+  COFFEE: "coffee",
+  PASTRY: "pastry",
+  MERCH: "merch",
+  REWARDS: "rewards",
+} as const;
+
+export type CategoryType = (typeof Category)[keyof typeof Category];
+
+export interface OrderedProducts {
+  productName: string;
+  price: string;
+  img: string;
+  quantity: number;
+  additionMilk: string;
+  additionSyrup: Array<string>;
+}
+
 export interface CartItem {
   product: Product;
   quantity: number;
