@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Kinetic Roast - Customize Nitro Cold Brew</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-low": "#131313",
+              "primary-fixed-dim": "#eeb200",
+              "tertiary-dim": "#eae553",
+              "surface-container": "#1a1a1a",
+              "on-error": "#450900",
+              "on-secondary": "#5c4b00",
+              "surface-container-highest": "#262626",
+              "on-secondary-fixed-variant": "#675400",
+              "on-error-container": "#ffd2c8",
+              "tertiary-fixed": "#f8f460",
+              "on-tertiary": "#646200",
+              "error-container": "#b92902",
+              "on-secondary-container": "#fff7e8",
+              "primary-fixed": "#ffbf00",
+              "on-surface": "#ffffff",
+              "on-tertiary-fixed-variant": "#686500",
+              "on-primary-fixed": "#3d2b00",
+              "primary-container": "#ffbf00",
+              "secondary-fixed": "#fed73e",
+              "outline": "#767575",
+              "error": "#ff7351",
+              "tertiary": "#fffbd2",
+              "inverse-surface": "#fcf9f8",
+              "surface-variant": "#262626",
+              "surface-dim": "#0e0e0e",
+              "on-secondary-fixed": "#463900",
+              "tertiary-fixed-dim": "#eae553",
+              "secondary-fixed-dim": "#efc930",
+              "on-surface-variant": "#adaaaa",
+              "on-tertiary-container": "#5c5900",
+              "error-dim": "#d53d18",
+              "inverse-primary": "#7a5a00",
+              "on-primary-fixed-variant": "#614700",
+              "surface": "#0e0e0e",
+              "secondary": "#fed73e",
+              "tertiary-container": "#f5f15d",
+              "surface-container-lowest": "#000000",
+              "on-background": "#ffffff",
+              "surface-container-high": "#20201f",
+              "primary-dim": "#eeb200",
+              "background": "#0e0e0e",
+              "outline-variant": "#484847",
+              "on-primary": "#614700",
+              "on-primary-container": "#563e00",
+              "inverse-on-surface": "#565555",
+              "surface-tint": "#ffd16f",
+              "on-tertiary-fixed": "#4a4800",
+              "secondary-dim": "#efc930",
+              "surface-bright": "#2c2c2c",
+              "secondary-container": "#715d00",
+              "primary": "#ffd16f"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sculpted-depth {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .backdrop-blur-xl {
+            backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-hidden">
+<!-- Header (Shared Component: TopAppBar) -->
+<header class="fixed top-0 w-full h-20 bg-[#0e0e0e] flex justify-between items-center px-8 w-full z-40">
+<div class="text-2xl font-black text-[#ffd16f] uppercase tracking-tighter font-['Plus_Jakarta_Sans']">The Kinetic Roast</div>
+<div class="flex items-center gap-6">
+<button class="text-[#adaaaa] hover:bg-[#262626] transition-colors p-2 rounded-full Active: scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOYnygXlpZhuhBW7-P1Ba1iwsbOb1r5QUU6va72ixcL5LLgW8Rqm3SDf5l2jfxlV8cE9TuHBYQB7TRf27ZXVBTnO4OSPj_nhmAQdlNTMhBAg7_LBYlLs8EWD4SuY2-YKnh74rhVJ8dVjgib_3kkDTlntPUMDS4TBgi1-jxTn1VR6OETuzUDRg5YCL7mLbz5e_r9ZsiV6P8_09KpQU79zTsHQ3EwFkHQehQQ8fnwWnZQloKW3GkbiVD8kmZJ5g9bZtqQhrlaH-VC3ll"/>
+</div>
+</div>
+</header>
+<!-- Side Navigation (Shared Component: SideNavBar) -->
+<aside class="fixed left-0 top-20 h-[calc(100vh-5rem)] w-24 bg-[#0e0e0e] bg-[#131313] flex flex-col items-center py-8 gap-8 z-30">
+<div class="flex flex-col items-center gap-1 mb-4">
+<span class="font-['Plus_Jakarta_Sans'] font-bold text-[10px] uppercase tracking-widest text-on-surface-variant">Menu</span>
+</div>
+<nav class="flex flex-col items-center gap-8 w-full">
+<div class="flex flex-col items-center gap-1 w-full py-2 text-[#adaaaa] hover:text-white hover:bg-[#131313] transition-all duration-300 ease-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="coffee">coffee</span>
+<span class="text-[9px] font-bold uppercase tracking-tighter">Coffee</span>
+</div>
+<div class="flex flex-col items-center gap-1 w-full py-2 text-[#adaaaa] hover:text-white hover:bg-[#131313] transition-all duration-300 ease-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="local_cafe">local_cafe</span>
+<span class="text-[9px] font-bold uppercase tracking-tighter">Tea</span>
+</div>
+<div class="flex flex-col items-center gap-1 w-full py-2 text-[#ffbf00] border-r-4 border-[#ffbf00] bg-[#1a1a1a] transition-all duration-300 ease-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="ac_unit">ac_unit</span>
+<span class="text-[9px] font-bold uppercase tracking-tighter">Cold Brew</span>
+</div>
+<div class="flex flex-col items-center gap-1 w-full py-2 text-[#adaaaa] hover:text-white hover:bg-[#131313] transition-all duration-300 ease-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="text-[9px] font-bold uppercase tracking-tighter">Seasonal</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas (The Menu Grid behind the modal) -->
+<main class="ml-24 mt-20 p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-40 grayscale-[0.5] pointer-events-none">
+<!-- Mock Menu Cards -->
+<div class="bg-surface-container-high p-6 rounded-xl h-80 flex flex-col justify-end relative overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60" data-alt="Glass of nitro cold brew with foam" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmAdoB3YT0Cs7V4pRepIiuE0StWtk741SJOZP5v4hVgrHuAOYuE51rvsf6BIeRUYqeBdJiqTRjpMtcXOGF0-RTPLkRkqw849fd2dNm00XLiDftRio2bdDNoeh_6Vy6VX2ulO-4qZnn4bhGasHCOrKa2CVkrmdEJ5yO3it_HHUd3GPg206rB6d24oClGk3LOFNi0MDPI_ceFm85eger8hPk8tcx_ZdAtzM2d_cnLVSqYlEJJnAQ67Ur62-KjUDuVJ-4CvIZ5OYBW6vX"/>
+<div class="relative z-10">
+<h3 class="font-headline font-bold text-2xl">Nitro Cold Brew</h3>
+<p class="text-on-surface-variant text-sm mt-1">Velvety, creamy, and infused with nitrogen.</p>
+<div class="mt-4 flex justify-between items-center">
+<span class="font-headline font-extrabold text-xl text-primary">$5.50</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-high p-6 rounded-xl h-80 flex flex-col justify-end relative overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60" data-alt="Iced coffee with swirling milk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIQ5-7Vy0FIhxENpxCp2ATHJIsSdGCSxlmXzPr8ojH_pttRsit0T_Holp1sUWyBlv3ooXgf8M-KSrErBq8D_k8LjP1O-EkhVdMOS0TUz4--BGqtwnu0ovwI9F-kbNeJKYR63sFhQ-H8z_iYBCK3pt_G0-BNmAeu3A8HpKpsx9kI1SdMJPOrkaZkYbKzfZFLqQEFeiUUxW2gdIJUPwzRou0WC5OI_Tj7PcUfEzEu7P_M8wl0UFEx83WAeBzTi4vcYq73pBNXa--dnic"/>
+<div class="relative z-10">
+<h3 class="font-headline font-bold text-2xl">Vanilla Sweet Cream</h3>
+<p class="text-on-surface-variant text-sm mt-1">House-made vanilla cream meets slow-steeped brew.</p>
+<div class="mt-4 flex justify-between items-center">
+<span class="font-headline font-extrabold text-xl text-primary">$6.25</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-high p-6 rounded-xl h-80 flex flex-col justify-end relative overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60" data-alt="Dark iced coffee with orange peel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJeUnH_NtF-1RvmVOTcBMewgfWNg-EQRVOV1WTaPGkdF3E32SPmtua5VYda8kp_-lXBK9QsZZeueG9Mfob9TzfDGw7HzxEkg2sa7qWmQcHdljw-29hGETbNM8RSLwZZF-U6Z57_ghn2MxiJQJ1feYANarm3hX2sduZoUwRVkxtFe1nKWneU_Onnt77if1VU1zEQUSEucjnAor7xu6Iwkrg7yQy5Jq7hfL_Qr-Gja-lhj8luHNxiPJKjbZrDqD9xqhmPKIZ7bXASm4M"/>
+<div class="relative z-10">
+<h3 class="font-headline font-bold text-2xl">Salted Caramel Cold Foam</h3>
+<p class="text-on-surface-variant text-sm mt-1">Savory-sweet foam on a bold dark base.</p>
+<div class="mt-4 flex justify-between items-center">
+<span class="font-headline font-extrabold text-xl text-primary">$6.50</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Customization Popup Backdrop -->
+<div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+<!-- Modal Dialog -->
+<div class="bg-surface-container-high w-full max-w-lg rounded-xl overflow-hidden flex flex-col relative sculpted-depth">
+<!-- Close Button -->
+<button class="absolute top-4 right-4 text-on-surface-variant hover:text-on-surface transition-colors z-10">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+<!-- Header Section with Hero Image -->
+<div class="relative h-48 w-full bg-surface-container-lowest">
+<img class="w-full h-full object-cover opacity-80" data-alt="Close up of nitro cold brew bubbles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5KsSDrldhQMP4PCBii3w7uyYrrJUU9G1nFwmgtCA-o10fQ40ginHsY7dcRCHOU_w2ilGst311jt1cbZvj6sutKnuHG8x8r_jH-4rAH3INfbfm5KmRe6wdOiRT5WfXHQvdoA15TiADTZszOR8eTwQwYH2gQgAWfBqrBQQAoQZoJcfWw5YYH_APn4GjnPYHF3gTB5_4CakvS5WZ8UrqfL1US_QgdEy5PwDIKBPPj2Ah7TfngJOVQKvPZsCcLQ_3Yl8ks6fUT0YnfGsx"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-high to-transparent"></div>
+<div class="absolute bottom-6 left-8">
+<span class="bg-primary text-on-primary-fixed text-[10px] font-bold px-2 py-1 rounded uppercase tracking-widest mb-2 inline-block">Customizer</span>
+<h2 class="font-headline text-3xl font-extrabold tracking-tight">Customize Your Nitro Cold Brew</h2>
+</div>
+</div>
+<!-- Scrollable Options Area -->
+<div class="p-8 space-y-8 overflow-y-auto max-h-[614px]">
+<!-- Milk Selection -->
+<section>
+<h4 class="font-headline text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">Select Milk Base</h4>
+<div class="grid grid-cols-1 gap-3">
+<label class="group cursor-pointer">
+<input checked="" class="hidden peer" name="milk" type="radio"/>
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-low border-2 border-transparent peer-checked:border-primary-container peer-checked:bg-surface-container transition-all">
+<span class="font-medium text-on-surface">Whole Milk</span>
+<div class="w-5 h-5 rounded-full border-2 border-outline group-hover:border-primary peer-checked:bg-primary peer-checked:border-primary flex items-center justify-center">
+<div class="w-2 h-2 bg-on-primary rounded-full opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+</div>
+</div>
+</label>
+<label class="group cursor-pointer">
+<input class="hidden peer" name="milk" type="radio"/>
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-low border-2 border-transparent peer-checked:border-primary-container peer-checked:bg-surface-container transition-all">
+<span class="font-medium text-on-surface">Oat Milk</span>
+<span class="text-primary-dim font-bold text-sm">+$0.50</span>
+</div>
+</label>
+<label class="group cursor-pointer">
+<input class="hidden peer" name="milk" type="radio"/>
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-low border-2 border-transparent peer-checked:border-primary-container peer-checked:bg-surface-container transition-all">
+<span class="font-medium text-on-surface">Almond Milk</span>
+<span class="text-primary-dim font-bold text-sm">+$0.50</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Syrup Selection (Chips) -->
+<section>
+<h4 class="font-headline text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">Add Syrup Flavors</h4>
+<div class="flex flex-wrap gap-3">
+<label class="cursor-pointer">
+<input class="hidden peer" type="checkbox"/>
+<div class="px-6 py-3 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium border-2 border-transparent peer-checked:bg-primary-container peer-checked:text-on-primary-fixed transition-all">
+                                Vanilla
+                            </div>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" type="checkbox"/>
+<div class="px-6 py-3 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium border-2 border-transparent peer-checked:bg-primary-container peer-checked:text-on-primary-fixed transition-all">
+                                Caramel
+                            </div>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" type="checkbox"/>
+<div class="px-6 py-3 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium border-2 border-transparent peer-checked:bg-primary-container peer-checked:text-on-primary-fixed transition-all">
+                                Hazelnut
+                            </div>
+</label>
+</div>
+</section>
+<!-- Quantity and CTA -->
+<div class="pt-4 border-t border-outline-variant flex items-center justify-between gap-6">
+<div class="flex items-center bg-surface-container-lowest rounded-xl p-1">
+<button class="w-12 h-12 flex items-center justify-center text-primary hover:bg-surface-container-highest rounded-lg transition-colors">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<span class="w-12 text-center font-headline font-bold text-xl">1</span>
+<button class="w-12 h-12 flex items-center justify-center text-primary hover:bg-surface-container-highest rounded-lg transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<button class="flex-1 bg-[#ffbf00] text-on-primary-fixed font-headline font-bold text-lg h-16 rounded-xl flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+<span>Add to Order</span>
+<span class="text-sm opacity-60">•</span>
+<span>$5.50</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>
