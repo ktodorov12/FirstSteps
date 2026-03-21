@@ -1,7 +1,15 @@
-import { assign, createActor, fromPromise, setup } from "xstate";
+import {
+  assign,
+  createActor,
+  fromPromise,
+  getNextTransitions,
+  raise,
+  setup,
+} from "xstate";
 import type { CategoryType, OrderedProducts } from "../types";
 import { KioskMachineState, type KioskMachineEvents } from "./types";
 import type { StateFrom } from "xstate";
+import { useKioskStore } from "../stores/kiosk-store";
 
 export interface KioskMachineContext {
   orderedProducts: Array<OrderedProducts>;
@@ -10,7 +18,7 @@ export interface KioskMachineContext {
 
 const initialContext: KioskMachineContext = {
   orderedProducts: [],
-  currentProductType: "coffee",
+  currentProductType: "" as CategoryType,
 };
 
 const kioskMachine = setup({
@@ -19,9 +27,12 @@ const kioskMachine = setup({
     events: {} as KioskMachineEvents,
   },
   guards: {
-    isSelectedProductChanged: () => {
-      // TODO: implement;
-      return true;
+    isSelectedProductChanged: ({ context, event }) => {
+      if (event.type !== "products.change") {
+        return false;
+      }
+
+      return context.currentProductType !== event.newProduct;
     },
     hasProductsInCart: () => {
       // TODO: implement;
@@ -29,9 +40,24 @@ const kioskMachine = setup({
     },
   },
   actions: {
-    getProducts: assign({
-      // TODO: implement;
+    assignNewCategory: assign({
+      currentProductType: ({ context, event }) => {
+        if (event.type === "products.change") {
+          return event.newProduct;
+        }
+
+        return context.currentProductType;
+      },
     }),
+    syncProductsWithZustand: ({ event }) => {
+      if (event.type !== "products.change") {
+        return;
+      }
+
+      const store = useKioskStore.getState();
+      store.setCurrentProductType(event.newProduct);
+      store.getProductsByCategory(event.newProduct);
+    },
     changeProductInCartQuantity: assign({
       // TODO: implement;
     }),
@@ -50,10 +76,21 @@ const kioskMachine = setup({
 }).createMachine({
   context: initialContext,
   id: "kiosk",
-  initial: KioskMachineState.BROWSING,
+  initial: KioskMachineState.INIT,
   states: {
+    [KioskMachineState.INIT]: {
+      always: {
+        target: KioskMachineState.BROWSING,
+        actions: raise({ type: "products.change", newProduct: "coffee" }),
+      },
+    },
     [KioskMachineState.BROWSING]: {
-      entry: "getProducts",
+      on: {
+        "products.change": {
+          guard: "isSelectedProductChanged",
+          actions: ["assignNewCategory", "syncProductsWithZustand"],
+        },
+      },
     },
     [KioskMachineState.ORDERING_PRODUCT]: {},
     [KioskMachineState.CHECKING_OUT]: {},
@@ -66,6 +103,15 @@ const kioskMachine = setup({
 export type KioskState = StateFrom<typeof kioskMachine>;
 
 const _actor = createActor(kioskMachine);
+
+_actor.subscribe((state) => {
+  console.log("[KioskActorState]", "State received -", JSON.stringify(state, null, 2));
+  console.log(
+    "[KioskActorNextTransitions]",
+    "Transitions -",
+    JSON.stringify(getNextTransitions(_actor.getSnapshot()), null, 2),
+  );
+});
 
 export function startKioskMachine() {
   _actor.start();

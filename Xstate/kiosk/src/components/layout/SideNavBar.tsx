@@ -1,5 +1,7 @@
 import type { FC } from "react";
 import { categories } from "../../data/mockData";
+import { getKioskActorRef } from "../../machines/kioskMachine";
+import type { CategoryType } from "../../types";
 
 interface SideNavBarProps {
   activeIndex: number;
@@ -7,6 +9,14 @@ interface SideNavBarProps {
 }
 
 const SideNavBar: FC<SideNavBarProps> = ({ activeIndex, onSelect }) => {
+  const actorRef = getKioskActorRef();
+
+  const handleClick = (categoryLabel: CategoryType, index: number) => {
+    onSelect(index);
+
+    actorRef.send({ type: "products.change", newProduct: categoryLabel });
+  };
+
   return (
     <aside className="fixed left-0 top-20 h-[calc(100vh-80px)] z-40 flex flex-col bg-[#0e0e0e] w-24 items-center py-8">
       <div className="mb-8 text-center">
@@ -18,7 +28,8 @@ const SideNavBar: FC<SideNavBarProps> = ({ activeIndex, onSelect }) => {
         {categories.map((cat, i) => (
           <button
             key={cat.id}
-            onClick={() => onSelect(i)}
+            datatype={cat.label}
+            onClick={() => handleClick(cat.id, i)}
             className={`rounded-2xl p-4 flex flex-col items-center gap-1 active:scale-90 duration-200 transition-all cursor-pointer ${
               activeIndex === i
                 ? "bg-primary-container text-[#0e0e0e]"

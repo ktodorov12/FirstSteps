@@ -1,3 +1,5 @@
+import type { CategoryType } from "../types";
+
 // Events ===============================================
 export type KioskUserEvents =
   | { type: "user.close_checkout" }
@@ -13,7 +15,7 @@ export type KioskTransactionEvents =
   | { type: "transaction.close" }
   | { type: "transaction.retry" };
 
-export type KioskProductEvents = { type: "products.change" };
+export type KioskProductEvents = { type: "products.change"; newProduct: CategoryType };
 
 export type KioskMachineEvents =
   | KioskUserEvents
@@ -23,6 +25,7 @@ export type KioskMachineEvents =
 
 // States ===============================================
 export const KioskMachineState = {
+  INIT: "INIT",
   BROWSING: "BROWSING",
   ORDERING_PRODUCT: "ORDERING_PRODUCT",
   CHECKING_OUT: "CHECKING_OUT",

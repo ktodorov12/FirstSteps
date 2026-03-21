@@ -1,4 +1,6 @@
 import type { FC } from "react";
+import { getKioskActorRef } from "../../machines/kioskMachine";
+import { Category, type CategoryType } from "../../types";
 
 interface TopNavBarProps {
   activeCategory: string;
@@ -7,14 +9,20 @@ interface TopNavBarProps {
   onCartClick: () => void;
 }
 
-const navLinks = ["Coffee", "Pastries", "Merch", "Rewards"];
-
 const TopNavBar: FC<TopNavBarProps> = ({
   activeCategory,
   onCategoryChange,
   cartCount,
   onCartClick,
 }) => {
+  const actorRef = getKioskActorRef();
+
+  const handleClick = (category: CategoryType) => {
+    actorRef.send({ type: "products.change", newProduct: category });
+
+    onCategoryChange(category);
+  };
+
   return (
     <header className="fixed top-0 left-0 w-full z-50 px-8 flex justify-between items-center bg-[#0e0e0e] h-20">
       <div className="flex items-center gap-8">
@@ -22,18 +30,19 @@ const TopNavBar: FC<TopNavBarProps> = ({
           The Kinetic Roast
         </span>
         <nav className="hidden md:flex gap-6">
-          {navLinks.map((link) => {
-            const isActive = activeCategory.toLowerCase() === link.toLowerCase();
+          {Object.values(Category).map((category) => {
+            const isActive = activeCategory.toLowerCase() === category.toLowerCase();
             return (
               <button
-                key={link}
-                onClick={() => onCategoryChange(link.toLowerCase())}
+                key={category}
+                onClick={() => handleClick(category)}
                 className={`font-headline tracking-tight transition-colors pb-1 cursor-pointer ${
                   isActive
                     ? "text-primary border-b-2 border-primary-container"
                     : "text-on-surface-variant hover:text-primary"
                 }`}>
-                {link}
+                {category[0].toUpperCase()}
+                {category.slice(1)}
               </button>
             );
           })}

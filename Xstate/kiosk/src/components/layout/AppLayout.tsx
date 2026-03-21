@@ -1,11 +1,12 @@
 import { useState, type FC } from "react";
 import type { Product, CartItem } from "../../types";
-import { products, categories, mockCartItems } from "../../data/mockData";
+import { categories, mockCartItems } from "../../data/mockData";
 import TopNavBar from "./TopNavBar";
 import SideNavBar from "./SideNavBar";
 import ProductGrid from "../menu/ProductGrid";
 import OrderSummary from "../cart/OrderSummary";
 import CustomizationPopup from "../customization/CustomizationPopup";
+import { useKioskStore } from "../../stores/kiosk-store";
 
 const AppLayout: FC = () => {
   const [activeCategory, setActiveCategory] = useState("coffee");
@@ -13,6 +14,8 @@ const AppLayout: FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>(mockCartItems);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const products = useKioskStore((state) => state.fetchedProducts);
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);

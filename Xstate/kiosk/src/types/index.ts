@@ -34,7 +34,7 @@ export interface CartItem {
 }
 
 export interface Category {
-  id: string;
+  id: CategoryType;
   label: string;
   icon: string;
 }
